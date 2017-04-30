@@ -7,8 +7,7 @@ Implémentation Java de l'API de http://www.ticketrestaurant.nc
 
 Pour recuperer les datas, tout simplement :
 
-```
-java
+```java
             String login = "xxxxxxxxx";
             String password = "xxxxxx";
             
