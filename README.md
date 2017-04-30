@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/adriens/tickets-resto-nc-api.svg?branch=master)](https://travis-ci.org/adriens/tickets-resto-nc-api)
 
 # tickets-resto-nc-api
+
+[![Join the chat at https://gitter.im/tickets-resto-nc-api/Lobby](https://badges.gitter.im/tickets-resto-nc-api/Lobby.svg)](https://gitter.im/tickets-resto-nc-api/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Implémentation Java de l'API de http://www.ticketrestaurant.nc
 
 # Use case
