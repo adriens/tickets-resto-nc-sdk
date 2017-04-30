@@ -27,4 +27,21 @@ java
                 
             }
             System.out.println("################################################");
-``
+```
+
+Output :
+
+```
+################################################
+Solde (XPF) : 21310
+Employeur : MAIRIE DE NOUMEA
+Beneficiaire : MR ADRIEN SALES
+Transactions :
+
+Date : Mon Apr 24 00:00:00 SBT 2017 (Recharge)
+Date : Fri Apr 14 00:00:00 SBT 2017 (Transaction CHAMPION N'GEA)
+Date : Tue Apr 04 00:00:00 SBT 2017 (Transaction CHAMPION N'GEA)
+Date : Fri Mar 31 00:00:00 SBT 2017 (Recharge)
+Date : Wed Mar 29 00:00:00 SBT 2017 (Recharge)
+################################################
+```
