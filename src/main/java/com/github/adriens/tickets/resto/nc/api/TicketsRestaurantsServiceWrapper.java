@@ -31,6 +31,20 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class TicketsRestaurantsServiceWrapper {
 
+    /**
+     * @return the transactions
+     */
+    public ArrayList<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    /**
+     * @param transactions the transactions to set
+     */
+    public void setTransactions(ArrayList<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
     public static final String URL = "http://www.ticketrestaurant.nc/";
     public static final String SITE_TITLE = "Ticket Restaurant - La carte ticket restaurant en Nouvelle Calédonie";
     // form ids
@@ -191,10 +205,10 @@ public class TicketsRestaurantsServiceWrapper {
     private void feedTransactions() throws Exception{
         // first, click on "TRANSACTIONS
         // find the transaction button
-        transactions = new ArrayList<>();
+        setTransactions(new ArrayList<>());
         HtmlAnchor transactionsAnchor = accountPage.getAnchorByHref("/transactions");
         HtmlPage transactionsPage = transactionsAnchor.click();
-        System.out.println(transactionsPage.asText());
+        //System.out.println(transactionsPage.asText());
         if(transactionsPage.asText().contains("Liste de vos transactions")){
             System.out.println("Transactions found");
         }
@@ -225,10 +239,10 @@ public class TicketsRestaurantsServiceWrapper {
                 credititAsString = theRow.getCell(3).asText();
                 //System.out.println(theRow);
                 lTransaction = new Transaction(convertFromTextDate(dateAsString), libele, extractSolde(debitAsString), extractSolde(credititAsString));
-                transactions.add(lTransaction);
+                getTransactions().add(lTransaction);
                 System.out.println("Added new transction : " + lTransaction.toString());
 	}
-            System.out.println("End of <" + transactions.size() + "> transactions fetching");
+            System.out.println("End of <" + getTransactions().size() + "> transactions fetching");
         }
     }
     
