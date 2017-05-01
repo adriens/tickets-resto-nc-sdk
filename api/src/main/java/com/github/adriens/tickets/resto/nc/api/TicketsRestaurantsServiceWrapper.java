@@ -47,6 +47,8 @@ public class TicketsRestaurantsServiceWrapper {
 
     public static final String URL = "http://www.ticketrestaurant.nc/";
     public static final String URL_MENTIONS_LEGALES = "http://www.ticketrestaurant.nc/mentions-legales";
+    public static final String URL_AFFILIES = "http://www.ticketrestaurant.nc/liste-des-affilies";
+
     public static final String SITE_TITLE = "Ticket Restaurant - La carte ticket restaurant en Nouvelle Calédonie";
     // form ids
     public static final String LOGIN_FORM_ID = "login-form";
@@ -72,6 +74,7 @@ public class TicketsRestaurantsServiceWrapper {
     private int accountBalance;
 
     private ArrayList<Transaction> transactions;
+
     public TicketsRestaurantsServiceWrapper() {
         // Disable verbose logs
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
@@ -79,7 +82,7 @@ public class TicketsRestaurantsServiceWrapper {
 
     }
 
-    public TicketsRestaurantsServiceWrapper(String login, String password) throws Exception{
+    public TicketsRestaurantsServiceWrapper(String login, String password) throws Exception {
         // Disable verbose logs
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
@@ -87,16 +90,16 @@ public class TicketsRestaurantsServiceWrapper {
         feedTransactions();
 
     }
-    
+
     // static utility functions
     public final static int extractSolde(String soldeString) throws NumberFormatException {
-        if(soldeString == null){
+        if (soldeString == null) {
             return 0;
         }
-        if (soldeString.trim().length() == 0){
+        if (soldeString.trim().length() == 0) {
             return 0;
         }
-        if(soldeString.isEmpty()){
+        if (soldeString.isEmpty()) {
             return 0;
         }
         String solde = soldeString;
@@ -114,10 +117,11 @@ public class TicketsRestaurantsServiceWrapper {
             throw ex;
         }
     }
-    public final static Date convertFromTextDate (String dateInString) throws ParseException{
+
+    public final static Date convertFromTextDate(String dateInString) throws ParseException {
         // input format expected : DD/MM/YYYY
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-         try {
+        try {
             Date date = formatter.parse(dateInString);
             //System.out.println(date);
             //System.out.println(formatter.format(date));
@@ -127,7 +131,7 @@ public class TicketsRestaurantsServiceWrapper {
             throw ex;
         }
     }
-    
+
     protected final static boolean loginFormExistsWithExpectedId() throws IOException {
         WebClient webClient = new WebClient(BrowserVersion.CHROME);
         HtmlPage htmlPage = webClient.getPage(TicketsRestaurantsServiceWrapper.URL);
@@ -139,6 +143,7 @@ public class TicketsRestaurantsServiceWrapper {
             return true;
         }
     }
+
     protected final static boolean loginFormExistsWithExpectedUsernameInput(HtmlPage htmlPage) throws IOException {
         //check if we can fin login input
         HtmlForm form = htmlPage.getHtmlElementById(LOGIN_FORM_ID);
@@ -149,12 +154,14 @@ public class TicketsRestaurantsServiceWrapper {
             return true;
         }
     }
+
     protected final static boolean loginFormExistsWithExpectedPasswordInput(HtmlPage htmlPage) throws IOException {
         //check if we can fin login input
         HtmlForm form = htmlPage.getHtmlElementById(LOGIN_FORM_ID);
         HtmlPasswordInput passwdField = form.getInputByName(LOGIN_FORM_FIELD_ID_PASSWORD);
         return (passwdField != null) ? true : false;
     }
+
     protected final static boolean loginFormExistsWithExpectedSubmitButton(HtmlPage htmlPage) throws IOException {
         //check if we can fin login input
         HtmlForm form = htmlPage.getHtmlElementById(LOGIN_FORM_ID);
@@ -195,8 +202,8 @@ public class TicketsRestaurantsServiceWrapper {
         }
         // Extract name
         this.setAccountName(accountPage.getFirstByXPath(XPATH_NAME).toString());
-        System.out.println("Name found : <" + getAccountName()+ ">");
-        
+        System.out.println("Name found : <" + getAccountName() + ">");
+
         // Extract Employeer
         this.setAccountEmployeer(accountPage.getFirstByXPath(XPATH_EMPLOYEUR).toString());
         System.out.println("Employeer found : <" + getAccountEmployeer() + ">");
@@ -205,37 +212,37 @@ public class TicketsRestaurantsServiceWrapper {
         this.setAccountBalance(extractSolde(accountPage.getFirstByXPath(XPATH_SOLDE).toString()));
         System.out.println("Balace found : <" + getAccountBalance() + ">");
     }
-    private void feedTransactions() throws Exception{
+
+    private void feedTransactions() throws Exception {
         // first, click on "TRANSACTIONS
         // find the transaction button
         setTransactions(new ArrayList<>());
         HtmlAnchor transactionsAnchor = accountPage.getAnchorByHref("/transactions");
         HtmlPage transactionsPage = transactionsAnchor.click();
         //System.out.println(transactionsPage.asText());
-        if(transactionsPage.asText().contains("Liste de vos transactions")){
+        if (transactionsPage.asText().contains("Liste de vos transactions")) {
             System.out.println("Transactions found");
-        }
-        else{
+        } else {
             System.err.println("Was not able to fetch transactions");
             throw new Exception("Was not able to fetch transactions");
         }
         // now we have to fetch transactions, one by one
         HtmlTable transactionsTable = transactionsPage.getHtmlElementById("DataTables_Table_0");
         String dateAsString;
-            String libele;
-            String debitAsString;
-            String credititAsString;
-            Date transactionDate;
-            Transaction lTransaction = new Transaction();
+        String libele;
+        String debitAsString;
+        String credititAsString;
+        Date transactionDate;
+        Transaction lTransaction = new Transaction();
         for (final HtmlTableBody body : transactionsTable.getBodies()) {
-        final List<HtmlTableRow> rows = body.getRows();
-        System.out.println("Rows found : " + rows.size());
-        // now fetch each row
+            final List<HtmlTableRow> rows = body.getRows();
+            System.out.println("Rows found : " + rows.size());
+            // now fetch each row
             Iterator<HtmlTableRow> rowIter = rows.iterator();
             HtmlTableRow theRow;
-            
+
             while (rowIter.hasNext()) {
-		theRow = rowIter.next();
+                theRow = rowIter.next();
                 dateAsString = theRow.getCell(0).asText();
                 libele = theRow.getCell(1).asText();
                 debitAsString = theRow.getCell(2).asText();
@@ -244,14 +251,14 @@ public class TicketsRestaurantsServiceWrapper {
                 lTransaction = new Transaction(convertFromTextDate(dateAsString), libele, extractSolde(debitAsString), extractSolde(credititAsString));
                 getTransactions().add(lTransaction);
                 System.out.println("Added new transction : " + lTransaction.toString());
-	}
+            }
             System.out.println("End of <" + getTransactions().size() + "> transactions fetching");
         }
     }
-    
+
     @Override
-    public String toString(){
-        String out = "Nom : " + getAccountName() + "\n" + "Employeer : " + getAccountEmployeer()+ "\n" + "Balance : " + getAccountBalance();
+    public String toString() {
+        String out = "Nom : " + getAccountName() + "\n" + "Employeer : " + getAccountEmployeer() + "\n" + "Balance : " + getAccountBalance();
         return out;
     }
 
@@ -295,5 +302,51 @@ public class TicketsRestaurantsServiceWrapper {
      */
     public void setAccountBalance(int accountBalance) {
         this.accountBalance = accountBalance;
+    }
+
+    public static final void getAffilies() throws IOException {
+        WebClient webClient = new WebClient();
+        HtmlPage affiliesPage = webClient.getPage(TicketsRestaurantsServiceWrapper.URL_AFFILIES);
+        String tableId = "DataTables_Table_0";
+        final HtmlTable table = affiliesPage.getHtmlElementById(tableId);
+        // by default 15/page
+        
+        for (final HtmlTableBody body : table.getBodies()) {
+            final List<HtmlTableRow> rows = body.getRows();
+            System.out.println("Affilies detected : " + rows.size());
+            // now fetch each row
+            Iterator<HtmlTableRow> rowIter = rows.iterator();
+            HtmlTableRow theRow;
+            System.out.println("Fetching affilies...");
+            String lEnseigne;
+            String lCategorie;
+            String lCuisine;
+            String lTelephone;
+            String lAdresse;
+            String lCommune;
+            String lQuartier;
+            while (rowIter.hasNext()) {
+                theRow = rowIter.next();
+                lEnseigne = theRow.getCell(0).asText();
+                lCategorie = theRow.getCell(1).asText();
+                lCuisine = theRow.getCell(2).asText();
+                lTelephone = theRow.getCell(3).asText();
+                lAdresse = theRow.getCell(4).asText();
+                lCommune = theRow.getCell(5).asText();
+                lQuartier = theRow.getCell(6).asText();
+                System.out.println("Found affilie : <" + lEnseigne + ">" + lCommune);
+                System.out.println(theRow.toString());
+                /*
+                dateAsString = theRow.getCell(0).asText();
+                libele = theRow.getCell(1).asText();
+                debitAsString = theRow.getCell(2).asText();
+                credititAsString = theRow.getCell(3).asText();
+                System.out.println(theRow);
+                lTransaction = new Transaction(convertFromTextDate(dateAsString), libele, extractSolde(debitAsString), extractSolde(credititAsString));
+                getTransactions().add(lTransaction);
+                System.out.println("Added new transction : " + lTransaction.toString());
+                */
+            }
+        }
     }
 }

@@ -15,8 +15,8 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            String login = "xxxxxx";
-            String password = "xxxxxx";
+            String login = "";
+            String password = "";
             
             TicketsRestaurantsServiceWrapper wrap = new TicketsRestaurantsServiceWrapper(login, password);
             // now deal with with account, credit, transactions ;-p
@@ -33,6 +33,8 @@ public class Main {
                 
             }
             System.out.println("################################################");
+
+            wrap.getAffilies();
             System.exit(0);
             
         } catch (Exception ex) {
