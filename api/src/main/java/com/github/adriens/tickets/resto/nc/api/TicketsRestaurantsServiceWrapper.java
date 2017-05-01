@@ -46,6 +46,7 @@ public class TicketsRestaurantsServiceWrapper {
     }
 
     public static final String URL = "http://www.ticketrestaurant.nc/";
+    public static final String URL_MENTIONS_LEGALES = "http://www.ticketrestaurant.nc/mentions-legales";
     public static final String SITE_TITLE = "Ticket Restaurant - La carte ticket restaurant en Nouvelle Calédonie";
     // form ids
     public static final String LOGIN_FORM_ID = "login-form";
@@ -58,6 +59,7 @@ public class TicketsRestaurantsServiceWrapper {
     public static final String TEXT_MON_COMPTE = "Mon compte";
     public static final String TEXT_RECHARGE = "Recharge";
     public static final String TEXT_TRANSACTION = "Transaction";
+    public static final String RCS = "RCS NOUMEA 2013 B 1 181 346";
     // xpath resources
     public static final String XPATH_NAME = "/html/body/div[1]/div[2]/div[2]/div/strong[1]/text()";
     public static final String XPATH_EMPLOYEUR = "/html/body/div[1]/div[2]/div[2]/div/strong[2]/text()";

@@ -33,6 +33,9 @@ public class TicketsRestaurantsServiceWrapperTest extends TestCase {
         try (final WebClient webClient = new WebClient()) {
             final HtmlPage page = webClient.getPage(TicketsRestaurantsServiceWrapper.URL);
             assertEquals(TicketsRestaurantsServiceWrapper.SITE_TITLE, page.getTitleText());
+            
+            final HtmlPage pageMentionsLegales = webClient.getPage(TicketsRestaurantsServiceWrapper.URL_MENTIONS_LEGALES);
+            assertTrue("Le RCS doit matcher", pageMentionsLegales.asText().contains(TicketsRestaurantsServiceWrapper.RCS));
         }
     }
     public void tesAPIComplianceWithWebsite(){
