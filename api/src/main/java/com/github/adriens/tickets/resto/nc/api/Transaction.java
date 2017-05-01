@@ -14,6 +14,12 @@ import java.util.Objects;
  */
 public class Transaction {
 
+    private Date date;
+    private String libelle;
+    private int debit;
+    private int credit;
+    
+    
     public Transaction() {
 
     }
@@ -112,8 +118,16 @@ public class Transaction {
     public void setCredit(int credit) {
         this.credit = credit;
     }
-    private Date date;
-    private String libelle;
-    private int debit;
-    private int credit;
+    public boolean isRecharge(){
+        if(libelle == null){
+            return false;
+        }
+        else{
+            return libelle.contains(TicketsRestaurantsServiceWrapper.TEXT_RECHARGE);
+        }
+    }
+    
+    public boolean isTransaction(){
+        return !isRecharge();
+    }
 }

@@ -56,7 +56,8 @@ public class TicketsRestaurantsServiceWrapper {
     // static texts
     public static final String TEXT_USER_DOES_NOT_EXISTS = "Cet utilisateur n'existe pas";
     public static final String TEXT_MON_COMPTE = "Mon compte";
-
+    public static final String TEXT_RECHARGE = "Recharge";
+    public static final String TEXT_TRANSACTION = "Transaction";
     // xpath resources
     public static final String XPATH_NAME = "/html/body/div[1]/div[2]/div[2]/div/strong[1]/text()";
     public static final String XPATH_EMPLOYEUR = "/html/body/div[1]/div[2]/div[2]/div/strong[2]/text()";
