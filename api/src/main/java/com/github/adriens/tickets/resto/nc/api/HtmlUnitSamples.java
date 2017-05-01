@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author salad74
  */
-public class Main {
+public class HtmlUnitSamples {
 
     public static void main(String[] args) {
         /* System.out.println("Hello");

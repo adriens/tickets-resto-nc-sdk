@@ -11,7 +11,7 @@ import java.util.Iterator;
  *
  * @author salad74
  */
-public class RealMain {
+public class Main {
 
     public static void main(String[] args) {
         try {
