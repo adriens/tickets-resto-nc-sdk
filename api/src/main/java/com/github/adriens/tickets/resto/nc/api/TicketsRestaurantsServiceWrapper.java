@@ -306,8 +306,11 @@ public class TicketsRestaurantsServiceWrapper {
         this.accountBalance = accountBalance;
     }
 
-    public static final void getAffilies() throws IOException {
+    public static final ArrayList<Affilie> getAffilies() throws IOException {
         WebClient webClient = new WebClient();
+        ArrayList<Affilie> affilies ;
+        affilies = new ArrayList<>();
+        
         HtmlPage affiliesPage = webClient.getPage(TicketsRestaurantsServiceWrapper.URL_AFFILIES);
         
         // Create temp file and fill it with site contents
@@ -321,6 +324,8 @@ public class TicketsRestaurantsServiceWrapper {
         // parse the page !
         String tableId = "DataTables_Table_0";
         final HtmlTable table = localAffiliesPage.getHtmlElementById(tableId);
+        
+        Affilie lAffilie = new Affilie();
         
         for (final HtmlTableBody body : table.getBodies()) {
             final List<HtmlTableRow> rows = body.getRows();
@@ -347,19 +352,11 @@ public class TicketsRestaurantsServiceWrapper {
                 lAdresse = theRow.getCell(4).asText();
                 lCommune = theRow.getCell(5).asText();
                 lQuartier = theRow.getCell(6).asText();
-                System.out.println("Found affilie <" + affiliesCount + "/" + rows.size() + "> : <" + lEnseigne + ">" + lCommune);
-                //System.out.println(theRow.asXml());
-                /*
-                dateAsString = theRow.getCell(0).asText();
-                libele = theRow.getCell(1).asText();
-                debitAsString = theRow.getCell(2).asText();
-                credititAsString = theRow.getCell(3).asText();
-                System.out.println(theRow);
-                lTransaction = new Transaction(convertFromTextDate(dateAsString), libele, extractSolde(debitAsString), extractSolde(credititAsString));
-                getTransactions().add(lTransaction);
-                System.out.println("Added new transction : " + lTransaction.toString());
-                */
+                //System.out.println("Found affilie <" + affiliesCount + "/" + rows.size() + "> : <" + lEnseigne + ">" + lCommune);
+                lAffilie = new Affilie(lEnseigne, lCategorie, lCuisine, lTelephone, lAdresse, lCommune, lQuartier);
+                affilies.add(lAffilie);
             }
         }
+    return affilies;
     }
 }

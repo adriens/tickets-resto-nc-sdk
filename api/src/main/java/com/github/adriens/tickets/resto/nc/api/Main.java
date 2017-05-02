@@ -5,6 +5,7 @@
  */
 package com.github.adriens.tickets.resto.nc.api;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -34,7 +35,15 @@ public class Main {
             }
             System.out.println("################################################");
 
-            wrap.getAffilies();
+            System.out.println("Affilies :");
+            ArrayList<Affilie> affilies = TicketsRestaurantsServiceWrapper.getAffilies();
+            Iterator<Affilie> affIter = affilies.iterator();
+            Affilie lAffilie = new Affilie();
+            while(affIter.hasNext()){
+                lAffilie = affIter.next();
+                System.out.println(lAffilie);
+            }
+            
             System.exit(0);
             
         } catch (Exception ex) {

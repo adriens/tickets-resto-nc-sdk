@@ -62,7 +62,12 @@ public class Affilie {
     
     @Override
     public String toString() {
-        return getEnseigne();
+        if(getCommune().trim().length() > 0){
+            return getEnseigne() + " (" + getCommune() + ")";
+        }
+        else{
+            return getEnseigne();
+        }
     }
 
     /**
