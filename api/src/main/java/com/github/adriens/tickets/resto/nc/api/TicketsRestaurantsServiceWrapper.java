@@ -16,6 +16,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlTable;
 import com.gargoylesoftware.htmlunit.html.HtmlTableBody;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -307,9 +309,18 @@ public class TicketsRestaurantsServiceWrapper {
     public static final void getAffilies() throws IOException {
         WebClient webClient = new WebClient();
         HtmlPage affiliesPage = webClient.getPage(TicketsRestaurantsServiceWrapper.URL_AFFILIES);
+        
+        // Create temp file and fill it with site contents
+        File temp = File.createTempFile("affilies", ".html.tmp");
+        FileUtils.writeStringToFile(temp, affiliesPage.asXml());
+        // disable js on the html page so we can fetch all in a single shot !
+        webClient.getOptions().setJavaScriptEnabled(false);
+        // load the page
+        HtmlPage localAffiliesPage = webClient.getPage("file://" + temp.getAbsolutePath());
+        
+        // parse the page !
         String tableId = "DataTables_Table_0";
-        final HtmlTable table = affiliesPage.getHtmlElementById(tableId);
-        // by default 15/page
+        final HtmlTable table = localAffiliesPage.getHtmlElementById(tableId);
         
         for (final HtmlTableBody body : table.getBodies()) {
             final List<HtmlTableRow> rows = body.getRows();
@@ -325,8 +336,10 @@ public class TicketsRestaurantsServiceWrapper {
             String lAdresse;
             String lCommune;
             String lQuartier;
+            int affiliesCount = 0;
             while (rowIter.hasNext()) {
                 theRow = rowIter.next();
+                affiliesCount++;
                 lEnseigne = theRow.getCell(0).asText();
                 lCategorie = theRow.getCell(1).asText();
                 lCuisine = theRow.getCell(2).asText();
@@ -334,8 +347,8 @@ public class TicketsRestaurantsServiceWrapper {
                 lAdresse = theRow.getCell(4).asText();
                 lCommune = theRow.getCell(5).asText();
                 lQuartier = theRow.getCell(6).asText();
-                System.out.println("Found affilie : <" + lEnseigne + ">" + lCommune);
-                System.out.println(theRow.toString());
+                System.out.println("Found affilie <" + affiliesCount + "/" + rows.size() + "> : <" + lEnseigne + ">" + lCommune);
+                //System.out.println(theRow.asXml());
                 /*
                 dateAsString = theRow.getCell(0).asText();
                 libele = theRow.getCell(1).asText();
