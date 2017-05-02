@@ -16,8 +16,8 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            String login = "";
-            String password = "";
+            String login = args[0];
+            String password = args[1];
             
             TicketsRestaurantsServiceWrapper wrap = new TicketsRestaurantsServiceWrapper(login, password);
             // now deal with with account, credit, transactions ;-p
