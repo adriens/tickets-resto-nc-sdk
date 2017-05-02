@@ -46,7 +46,15 @@ Date : Tue Apr 04 00:00:00 SBT 2017 (Transaction CHAMPION N'GEA)
 Date : Fri Mar 31 00:00:00 SBT 2017 (Recharge)
 Date : Wed Mar 29 00:00:00 SBT 2017 (Recharge)
 ################################################
+
+
 ```
 # Use this lib in your project
 
 Follow jitpack instructions, see https://jitpack.io/#adriens/tickets-resto-nc-api
+
+# Motivations
+
+- [x] Deal with htmlunit
+- [ ] Deal with Apache POI
+- [ ] Discover advanced features of Google Spreadsheets : dashboatd, reporting, mobile apps based on spreadsheets, ...
