@@ -8,12 +8,13 @@ package com.github.adriens.tickets.resto.nc.api;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
+import java.util.Objects;
 
 /**
  *
  * @author salad74
  */
-public class Affilie {
+public class Affilie implements Comparable<Affilie>{
 
     private String enseigne;
     private String categorie;
@@ -28,8 +29,25 @@ public class Affilie {
     public Affilie() {
 
     }
-
-    public Affilie(String enseigne, String categorie, String cuisine, String telephone, String adresse, String commune, String quartier) {
+    
+    @Override
+    public int compareTo( final Affilie a) {
+        return this.getEnseigne().compareTo(a.getEnseigne());
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.enseigne);
+        return hash;
+    }
+    
+    public Affilie(String enseigne, String categorie, String cuisine, String telephone, String adresse, String commune, String quartier) throws Exception
+    {
+        if(enseigne == null){
+            System.err.println("Affilie enseigne should not be null");
+            throw new Exception("Affilie enseigne should not be null");
+        }
         setEnseigne(enseigne);
         setCategorie(categorie);
         setCuisine(cuisine);
