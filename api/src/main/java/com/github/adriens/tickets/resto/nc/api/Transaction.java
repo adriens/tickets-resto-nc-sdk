@@ -31,6 +31,7 @@ public class Transaction {
         setCredit(credit);
     }
 
+    @Override
     public String toString() {
         String out = "";
         //out = "Date : " + getDate() + "\nLibele : " + getLibelle() + "\nDebit : " + getDebit() + "\nCredit : " + getCredit();
