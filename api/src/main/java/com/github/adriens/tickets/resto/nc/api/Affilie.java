@@ -48,13 +48,13 @@ public class Affilie implements Comparable<Affilie>{
             System.err.println("Affilie enseigne should not be null");
             throw new Exception("Affilie enseigne should not be null");
         }
-        setEnseigne(enseigne);
-        setCategorie(categorie);
-        setCuisine(cuisine);
-        setTelephone(telephone);
-        setAdresse(adresse);
-        setCommune(commune);
-        setQuartier(quartier);
+        this.enseigne =enseigne;
+        this.categorie = categorie;
+        this.cuisine = cuisine;
+        this.telephone = telephone;
+        this.adresse = adresse;
+        this.commune = commune;
+        this.quartier = quartier;
 
     }
 
