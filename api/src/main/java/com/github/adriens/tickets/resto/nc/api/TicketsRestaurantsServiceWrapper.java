@@ -306,7 +306,7 @@ public class TicketsRestaurantsServiceWrapper {
         this.accountBalance = accountBalance;
     }
 
-    public static final ArrayList<Affilie> getAffilies() throws IOException {
+    public static final ArrayList<Affilie> getAffilies() throws Exception {
         WebClient webClient = new WebClient();
         ArrayList<Affilie> affilies ;
         affilies = new ArrayList<>();
