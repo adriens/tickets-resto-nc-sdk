@@ -1,2 +1,4 @@
 /api/target/
 /api/dependency-reduced-pom.xml
+/cli/target/
+/cli/nbactions.xml
