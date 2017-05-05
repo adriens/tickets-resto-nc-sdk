@@ -91,5 +91,12 @@ public class ExcelWrapper {
     
          }
 
+    affiliesSheet.autoSizeColumn(0);
+    affiliesSheet.autoSizeColumn(1);
+    affiliesSheet.autoSizeColumn(2);
+    affiliesSheet.autoSizeColumn(3);
+    affiliesSheet.autoSizeColumn(4);
+    affiliesSheet.autoSizeColumn(5);
+    affiliesSheet.autoSizeColumn(6);
     }
 }

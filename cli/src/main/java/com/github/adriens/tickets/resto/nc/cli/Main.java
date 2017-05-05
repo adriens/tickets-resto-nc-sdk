@@ -13,7 +13,7 @@ public class Main {
        public static void main(String[] args) {
             try{
                 ExcelWrapper wrap = new ExcelWrapper();
-            wrap.create("test.xlsx");
+            wrap.create("affilies.xlsx");
             }
             catch(Exception ex){
                 ex.printStackTrace();
