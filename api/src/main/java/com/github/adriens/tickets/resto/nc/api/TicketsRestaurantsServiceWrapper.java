@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -357,6 +359,7 @@ public class TicketsRestaurantsServiceWrapper {
                 affilies.add(lAffilie);
             }
         }
-    return affilies;
+        Collections.sort(affilies);
+        return affilies;
     }
 }
