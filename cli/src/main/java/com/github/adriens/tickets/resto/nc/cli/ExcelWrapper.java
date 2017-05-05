@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javafx.scene.transform.Affine;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -62,7 +63,8 @@ public class ExcelWrapper {
          int rowNum = 0;
          Iterator<Affilie> affIter = affList.iterator();
          Affilie lAff;
-         
+         String gmapsUrl = "";
+         FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
          while(affIter.hasNext()){
              Row row = affiliesSheet.createRow(rowNum++);
              lAff = affIter.next();
@@ -77,7 +79,7 @@ public class ExcelWrapper {
              cellCuisi.setCellValue(lAff.getCuisine());
              
              Cell cellTel = row.createCell(3);
-             cellTel.setCellValue(lAff.getTelephone());
+             cellTel.setCellValue(Affilie.getFormattedTelephoneNumber(lAff.getTelephone()));
              
              Cell cellAdr = row.createCell(4);
              cellAdr.setCellValue(lAff.getAdresse());
@@ -87,6 +89,10 @@ public class ExcelWrapper {
              
              Cell cellQuar = row.createCell(6);
              cellQuar.setCellValue(lAff.getQuartier());
+             
+             Cell cellFullAdress = row.createCell(7);
+             gmapsUrl = "http://maps.google.com/maps?q=" + lAff.getFormattedAdress();
+             cellFullAdress.setCellFormula("HYPERLINK(\"" + gmapsUrl+ "\",\"Voir sur Google Maps\")");
              
     
          }
@@ -98,5 +104,6 @@ public class ExcelWrapper {
     affiliesSheet.autoSizeColumn(4);
     affiliesSheet.autoSizeColumn(5);
     affiliesSheet.autoSizeColumn(6);
+    affiliesSheet.autoSizeColumn(7);
     }
 }

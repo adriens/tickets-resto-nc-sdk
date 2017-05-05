@@ -87,6 +87,44 @@ public class Affilie implements Comparable<Affilie>{
             return getEnseigne();
         }
     }
+    
+    public String getFormattedAdress(){
+        String lAdresse = "";
+        String lCommune = "";
+        String lQuartier = "";
+        String out = "";
+        if(getAdresse() != null){
+            lAdresse = getAdresse();
+        }
+        if(getCommune() != null){
+            lCommune = getCommune();
+        }
+        if(getQuartier() != null){
+            lQuartier = getQuartier();
+        }
+        // we have no field set
+        if (lAdresse.isEmpty() && getCommune().isEmpty() && lQuartier.isEmpty()){
+            return "Nouvelle-Calédonie";
+        }
+        
+        if(lAdresse.isEmpty()){
+            // no address
+            out = "";
+        }
+        else{
+            //addresse is set
+            out = lAdresse;
+        }
+        
+        if(!lQuartier.isEmpty()){
+            out += ", " + lQuartier;
+        }
+        if(!lCommune.isEmpty()){
+            out += ", " + lCommune;
+        }
+        
+        return out + ", Nouvelle-Calédonie";
+    }
 
     /**
      * @return the enseigne
