@@ -317,7 +317,8 @@ public class TicketsRestaurantsServiceWrapper {
         
         // Create temp file and fill it with site contents
         File temp = File.createTempFile("affilies", ".html.tmp");
-        FileUtils.writeStringToFile(temp, affiliesPage.asXml());
+        //FileUtils.writeStringToFile(temp, affiliesPage.asXml());
+        FileUtils.writeStringToFile(temp, affiliesPage.asXml(), "UTF-8");
         // disable js on the html page so we can fetch all in a single shot !
         webClient.getOptions().setJavaScriptEnabled(false);
         // load the page
