@@ -39,6 +39,7 @@
     </dependency>
   </dependencies>
   <properties>
+    <poi.version>3.16</poi.version>
     <maven-shade-plugin.version>3.0.0</maven-shade-plugin.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
