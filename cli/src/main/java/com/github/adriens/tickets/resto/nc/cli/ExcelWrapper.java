@@ -56,7 +56,9 @@ public class ExcelWrapper {
         workbook.close();
     }
 
-    public void createOrUpdateSolde(String filename, String login, String password) throws IOException, InvalidFormatException {
+    public void createOrUpdateSolde(String filename, String login, String password) throws IOException,
+            InvalidFormatException, 
+            Exception{
 
         // load workbook
         File inputSoldeFile = new File(filename);
@@ -96,8 +98,8 @@ public class ExcelWrapper {
 
         Cell soldeCell = soldeRow.createCell(0);
         // get cuurent online solde
-        Tic
-        soldeCell.setCellValue(21310);
+        TicketsRestaurantsServiceWrapper wrap = new TicketsRestaurantsServiceWrapper(login, password);
+        soldeCell.setCellValue(wrap.getAccountBalance());
 
         Cell updateCell = soldeRow.createCell(1);
         updateCell.setCellValue(sdf.format(new Date()));
