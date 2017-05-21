@@ -22,6 +22,8 @@ import javafx.scene.transform.Affine;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -60,6 +62,10 @@ public class ExcelWrapper {
             InvalidFormatException, 
             Exception{
 
+        TicketsRestaurantsServiceWrapper ticketsService = new TicketsRestaurantsServiceWrapper(login, password);
+        int soldeBalance = ticketsService.getAccountBalance();
+        System.out.println("SOLDE détecté : " + soldeBalance);
+        
         // load workbook
         File inputSoldeFile = new File(filename);
         XSSFWorkbook soldeWorkbook;
@@ -77,9 +83,21 @@ public class ExcelWrapper {
             tmpOut.close();
         }
         // here file exists
+        
+        
+
         FileInputStream fileIn = new FileInputStream(new File("solde.xlsx"));
         soldeWorkbook = new XSSFWorkbook(fileIn);
         soldeSheet = soldeWorkbook.getSheet("Solde");
+        
+        // prepare date cell style
+        CellStyle cellStyle = soldeWorkbook.createCellStyle();
+        CreationHelper createHelper = soldeWorkbook.getCreationHelper();
+        cellStyle.setDataFormat(
+        //createHelper.createDataFormat().getFormat("m/d/yy h:mm"));
+        createHelper.createDataFormat().getFormat("yyyy/m/d/ hh:mm"));
+        
+        
         int lastRowNum = soldeSheet.getPhysicalNumberOfRows();
         System.out.println("nb rows found : " + lastRowNum);
         if (lastRowNum == 0) {
@@ -89,6 +107,7 @@ public class ExcelWrapper {
 
             Cell updateCell = soldeRow.createCell(1);
             updateCell.setCellValue("Update Date");
+            updateCell.setCellStyle(cellStyle);
         } else {
             // shift down rows from 1
             soldeSheet.shiftRows(1, soldeSheet.getLastRowNum(), 1);
@@ -98,8 +117,7 @@ public class ExcelWrapper {
 
         Cell soldeCell = soldeRow.createCell(0);
         // get cuurent online solde
-        TicketsRestaurantsServiceWrapper wrap = new TicketsRestaurantsServiceWrapper(login, password);
-        soldeCell.setCellValue(wrap.getAccountBalance());
+        soldeCell.setCellValue(soldeBalance);
 
         Cell updateCell = soldeRow.createCell(1);
         updateCell.setCellValue(sdf.format(new Date()));
