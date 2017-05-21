@@ -25,8 +25,9 @@ public class Main {
             System.out.println("Solde (XPF) : " + wrap.getAccountBalance());
             System.out.println("Employeur : " + wrap.getAccountEmployeer());
             System.out.println("Beneficiaire : " + wrap.getAccountName());
+            
             // Listing transactions
-            System.out.println("Transactions :\n");
+            /*System.out.println("Transactions :\n");
             Iterator<Transaction> iter = wrap.getTransactions().iterator();
             
             while (iter.hasNext()) {
@@ -34,7 +35,8 @@ public class Main {
                 
             }
             System.out.println("################################################");
-
+            */
+            
             System.out.println("Affilies :");
             ArrayList<Affilie> affilies = TicketsRestaurantsServiceWrapper.getAffilies();
             Iterator<Affilie> affIter = affilies.iterator();

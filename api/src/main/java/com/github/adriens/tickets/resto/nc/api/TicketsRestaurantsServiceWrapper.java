@@ -91,7 +91,8 @@ public class TicketsRestaurantsServiceWrapper {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
         setUpAccount(login, password);
-        feedTransactions();
+        //setUpAccount2(login, password);
+        //feedTransactions();
 
     }
 
@@ -107,12 +108,12 @@ public class TicketsRestaurantsServiceWrapper {
             return 0;
         }
         String solde = soldeString;
-        System.out.println("Input SOLDE : " + solde);
+        //System.out.println("Input SOLDE : " + solde);
 
         solde = solde.replace("XPF", "");
         solde = StringUtils.chomp(solde);
         solde = StringUtils.deleteWhitespace(solde);
-        System.out.println("SOLDE DETECTE : " + solde);
+        //System.out.println("SOLDE DETECTE : " + solde);
         // convert it to a number
         try {
             return Integer.parseInt(solde);
@@ -176,7 +177,53 @@ public class TicketsRestaurantsServiceWrapper {
             return false;
         }
     }
+    private void setUpAccount2(String login, String password) throws Exception {
+        // first perform login to webpage
+        WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        HtmlPage htmlPage = webClient.getPage(URL);
+        HtmlForm form = htmlPage.getHtmlElementById(LOGIN_FORM_ID);
 
+        HtmlTextInput loginField = form.getInputByName(LOGIN_FORM_FIELD_ID_LOGIN);
+        loginField.setValueAttribute(login);
+
+        HtmlPasswordInput passwdField = form.getInputByName(LOGIN_FORM_FIELD_ID_PASSWORD);
+        passwdField.setValueAttribute(password);
+
+        HtmlButton button = form.getButtonByName(LOGIN_FORM_FIELD_ID_SUBMIT_BUTTON);
+        this.accountPage = button.click();
+        File accountFile = new File("account.html");
+        FileUtils.writeStringToFile(accountFile, this.accountPage.asXml(), "UTF-8");
+        // disable js on the html page so we can fetch all in a single shot !
+        webClient.getOptions().setJavaScriptEnabled(false);
+        
+        // load the page
+        HtmlPage accountPage = webClient.getPage("file://" + accountFile.getAbsolutePath());
+        if (accountPage.asText().contains(TEXT_USER_DOES_NOT_EXISTS)) {
+            System.err.println(TEXT_USER_DOES_NOT_EXISTS);
+            throw (new Exception(TEXT_USER_DOES_NOT_EXISTS));
+        } else {
+            System.out.println("Successfully connected !");
+            if (accountPage.asText().contains(TEXT_MON_COMPTE)) {
+                System.out.println("Mon compte trouve.");
+            } else {
+                System.err.println("Impossible de trouver mon compte");
+                throw (new Exception("Impossible de toruver mon compte"));
+            }
+        }
+        // Extract name
+        this.setAccountName(accountPage.getFirstByXPath(XPATH_NAME).toString());
+        System.out.println("Name found : <" + getAccountName() + ">");
+
+        // Extract Employeer
+        this.setAccountEmployeer(accountPage.getFirstByXPath(XPATH_EMPLOYEUR).toString());
+        System.out.println("Employeer found : <" + getAccountEmployeer() + ">");
+
+        // Extract balance
+        this.setAccountBalance(extractSolde(accountPage.getFirstByXPath(XPATH_SOLDE).toString()));
+        System.out.println("Balace found : <" + getAccountBalance() + ">");
+    
+        
+    }
     private void setUpAccount(String login, String password) throws Exception {
         // first perform login to webpage
         WebClient webClient = new WebClient(BrowserVersion.CHROME);
