@@ -9,6 +9,8 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -23,6 +25,8 @@ public class Affilie implements Comparable<Affilie>{
     private String adresse;
     private String commune;
     private String quartier;
+    
+    final static Logger logger = LoggerFactory.getLogger(Affilie.class);
 
     private PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
 
@@ -45,7 +49,7 @@ public class Affilie implements Comparable<Affilie>{
     public Affilie(String enseigne, String categorie, String cuisine, String telephone, String adresse, String commune, String quartier) throws Exception
     {
         if(enseigne == null){
-            System.err.println("Affilie enseigne should not be null");
+            logger.error("Affilie enseigne should not be null");
             throw new Exception("Affilie enseigne should not be null");
         }
         this.enseigne =enseigne;
@@ -68,11 +72,11 @@ public class Affilie implements Comparable<Affilie>{
         PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
         try {
             Phonenumber.PhoneNumber ncNumberProto = phoneUtil.parse(phoneNumber ,"NC");
-            //System.out.println("Parsed tel : " + ncNumberProto);
-            //System.out.println(phoneUtil.format(ncNumberProto, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL));
+            logger.debug("Parsed tel : " + ncNumberProto);
+            logger.debug(phoneUtil.format(ncNumberProto, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL));
             return phoneUtil.format(ncNumberProto, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL);
         } catch (NumberParseException e) {
-            System.err.println("PhoneNumber NumberParseException was thrown: " + e.toString());
+            logger.error("PhoneNumber NumberParseException was thrown: " + e.toString());
             return null;
         }
     
