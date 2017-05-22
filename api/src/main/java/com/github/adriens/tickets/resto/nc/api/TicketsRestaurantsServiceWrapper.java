@@ -21,13 +21,14 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -78,6 +79,8 @@ public class TicketsRestaurantsServiceWrapper {
     private int accountBalance;
 
     private ArrayList<Transaction> transactions;
+    final static Logger logger = LoggerFactory.getLogger(TicketsRestaurantsServiceWrapper.class);
+    
 
     public TicketsRestaurantsServiceWrapper() {
         // Disable verbose logs
@@ -108,17 +111,17 @@ public class TicketsRestaurantsServiceWrapper {
             return 0;
         }
         String solde = soldeString;
-        //System.out.println("Input SOLDE : " + solde);
+        logger.debug("Input SOLDE : " + solde);
 
         solde = solde.replace("XPF", "");
         solde = StringUtils.chomp(solde);
         solde = StringUtils.deleteWhitespace(solde);
-        //System.out.println("SOLDE DETECTE : " + solde);
+        logger.debug("SOLDE DETECTE : " + solde);
         // convert it to a number
         try {
             return Integer.parseInt(solde);
         } catch (NumberFormatException ex) {
-            System.err.println("Unable to cast String of solde <" + solde + ">into it numeric version : " + ex.getMessage());
+            logger.error("Unable to cast String of solde <" + solde + ">into it numeric version : " + ex.getMessage());
             throw ex;
         }
     }
@@ -128,11 +131,11 @@ public class TicketsRestaurantsServiceWrapper {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         try {
             Date date = formatter.parse(dateInString);
-            //System.out.println(date);
-            //System.out.println(formatter.format(date));
+            logger.debug(date + "");
+            logger.debug(formatter.format(date));
             return date;
         } catch (ParseException ex) {
-            System.err.println("Unable to parse date <" + dateInString + "> to date : " + ex.getMessage());
+            logger.error("Unable to parse date <" + dateInString + "> to date : " + ex.getMessage());
             throw ex;
         }
     }
@@ -199,28 +202,28 @@ public class TicketsRestaurantsServiceWrapper {
         // load the page
         HtmlPage accountPage = webClient.getPage("file://" + accountFile.getAbsolutePath());
         if (accountPage.asText().contains(TEXT_USER_DOES_NOT_EXISTS)) {
-            System.err.println(TEXT_USER_DOES_NOT_EXISTS);
+            logger.error(TEXT_USER_DOES_NOT_EXISTS);
             throw (new Exception(TEXT_USER_DOES_NOT_EXISTS));
         } else {
-            System.out.println("Successfully connected !");
+            logger.info("Successfully connected !");
             if (accountPage.asText().contains(TEXT_MON_COMPTE)) {
-                System.out.println("Mon compte trouve.");
+                logger.info("Mon compte trouve.");
             } else {
-                System.err.println("Impossible de trouver mon compte");
+                logger.error("Impossible de trouver mon compte");
                 throw (new Exception("Impossible de toruver mon compte"));
             }
         }
         // Extract name
         this.setAccountName(accountPage.getFirstByXPath(XPATH_NAME).toString());
-        System.out.println("Name found : <" + getAccountName() + ">");
+        logger.info("Name found : <" + getAccountName() + ">");
 
         // Extract Employeer
         this.setAccountEmployeer(accountPage.getFirstByXPath(XPATH_EMPLOYEUR).toString());
-        System.out.println("Employeer found : <" + getAccountEmployeer() + ">");
+        logger.info("Employeer found : <" + getAccountEmployeer() + ">");
 
         // Extract balance
         this.setAccountBalance(extractSolde(accountPage.getFirstByXPath(XPATH_SOLDE).toString()));
-        System.out.println("Balace found : <" + getAccountBalance() + ">");
+        logger.info("Balace found : <" + getAccountBalance() + ">");
     
         
     }
@@ -240,28 +243,28 @@ public class TicketsRestaurantsServiceWrapper {
         this.accountPage = button.click();
 
         if (accountPage.asText().contains(TEXT_USER_DOES_NOT_EXISTS)) {
-            System.err.println(TEXT_USER_DOES_NOT_EXISTS);
+            logger.error(TEXT_USER_DOES_NOT_EXISTS);
             throw (new Exception(TEXT_USER_DOES_NOT_EXISTS));
         } else {
-            System.out.println("Successfully connected !");
+            logger.info("Successfully connected !");
             if (accountPage.asText().contains(TEXT_MON_COMPTE)) {
-                System.out.println("Mon compte trouve.");
+                logger.info("Mon compte trouve.");
             } else {
-                System.err.println("Impossible de trouver mon compte");
+                logger.error("Impossible de trouver mon compte");
                 throw (new Exception("Impossible de toruver mon compte"));
             }
         }
         // Extract name
         this.setAccountName(accountPage.getFirstByXPath(XPATH_NAME).toString());
-        System.out.println("Name found : <" + getAccountName() + ">");
+        logger.info("Name found : <" + getAccountName() + ">");
 
         // Extract Employeer
         this.setAccountEmployeer(accountPage.getFirstByXPath(XPATH_EMPLOYEUR).toString());
-        System.out.println("Employeer found : <" + getAccountEmployeer() + ">");
+        logger.info("Employeer found : <" + getAccountEmployeer() + ">");
 
         // Extract balance
         this.setAccountBalance(extractSolde(accountPage.getFirstByXPath(XPATH_SOLDE).toString()));
-        System.out.println("Balace found : <" + getAccountBalance() + ">");
+        logger.info("Balace found : <" + getAccountBalance() + ">");
     }
 
     private void feedTransactions() throws Exception {
@@ -270,11 +273,11 @@ public class TicketsRestaurantsServiceWrapper {
         setTransactions(new ArrayList<>());
         HtmlAnchor transactionsAnchor = accountPage.getAnchorByHref("/transactions");
         HtmlPage transactionsPage = transactionsAnchor.click();
-        //System.out.println(transactionsPage.asText());
+        logger.debug(transactionsPage.asText());
         if (transactionsPage.asText().contains("Liste de vos transactions")) {
-            System.out.println("Transactions found");
+            logger.info("Transactions found");
         } else {
-            System.err.println("Was not able to fetch transactions");
+            logger.error("Was not able to fetch transactions");
             throw new Exception("Was not able to fetch transactions");
         }
         // now we have to fetch transactions, one by one
@@ -287,7 +290,7 @@ public class TicketsRestaurantsServiceWrapper {
         Transaction lTransaction = new Transaction();
         for (final HtmlTableBody body : transactionsTable.getBodies()) {
             final List<HtmlTableRow> rows = body.getRows();
-            System.out.println("Rows found : " + rows.size());
+            logger.debug("Rows found : " + rows.size());
             // now fetch each row
             Iterator<HtmlTableRow> rowIter = rows.iterator();
             HtmlTableRow theRow;
@@ -298,12 +301,12 @@ public class TicketsRestaurantsServiceWrapper {
                 libele = theRow.getCell(1).asText();
                 debitAsString = theRow.getCell(2).asText();
                 credititAsString = theRow.getCell(3).asText();
-                //System.out.println(theRow);
+                logger.debug(theRow);
                 lTransaction = new Transaction(convertFromTextDate(dateAsString), libele, extractSolde(debitAsString), extractSolde(credititAsString));
                 getTransactions().add(lTransaction);
-                System.out.println("Added new transction : " + lTransaction.toString());
+                logger.debug("Added new transction : " + lTransaction.toString());
             }
-            System.out.println("End of <" + getTransactions().size() + "> transactions fetching");
+            logger.debug("End of <" + getTransactions().size() + "> transactions fetching");
         }
     }
 
@@ -379,11 +382,11 @@ public class TicketsRestaurantsServiceWrapper {
         
         for (final HtmlTableBody body : table.getBodies()) {
             final List<HtmlTableRow> rows = body.getRows();
-            System.out.println("Affilies detected : " + rows.size());
+            logger.info("Affilies detected : " + rows.size());
             // now fetch each row
             Iterator<HtmlTableRow> rowIter = rows.iterator();
             HtmlTableRow theRow;
-            System.out.println("Fetching affilies...");
+            logger.info("Fetching affilies...");
             String lEnseigne;
             String lCategorie;
             String lCuisine;
@@ -402,7 +405,7 @@ public class TicketsRestaurantsServiceWrapper {
                 lAdresse = theRow.getCell(4).asText();
                 lCommune = theRow.getCell(5).asText();
                 lQuartier = theRow.getCell(6).asText();
-                //System.out.println("Found affilie <" + affiliesCount + "/" + rows.size() + "> : <" + lEnseigne + ">" + lCommune);
+                logger.info("Found affilie <" + affiliesCount + "/" + rows.size() + "> : <" + lEnseigne + ">" + lCommune);
                 lAffilie = new Affilie(lEnseigne, lCategorie, lCuisine, lTelephone, lAdresse, lCommune, lQuartier);
                 affilies.add(lAffilie);
             }
