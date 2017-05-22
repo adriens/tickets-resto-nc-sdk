@@ -301,7 +301,7 @@ public class TicketsRestaurantsServiceWrapper {
                 libele = theRow.getCell(1).asText();
                 debitAsString = theRow.getCell(2).asText();
                 credititAsString = theRow.getCell(3).asText();
-                logger.debug(theRow);
+                logger.debug(theRow+"");
                 lTransaction = new Transaction(convertFromTextDate(dateAsString), libele, extractSolde(debitAsString), extractSolde(credititAsString));
                 getTransactions().add(lTransaction);
                 logger.debug("Added new transction : " + lTransaction.toString());
