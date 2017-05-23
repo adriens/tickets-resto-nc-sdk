@@ -7,12 +7,15 @@ package com.github.adriens.tickets.resto.nc.api;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author salad74
  */
 public class Main {
+    final static Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
         try {
@@ -21,35 +24,35 @@ public class Main {
             
             TicketsRestaurantsServiceWrapper wrap = new TicketsRestaurantsServiceWrapper(login, password);
             // now deal with with account, credit, transactions ;-p
-            System.out.println("################################################");
-            System.out.println("Solde (XPF) : " + wrap.getAccountBalance());
-            System.out.println("Employeur : " + wrap.getAccountEmployeer());
-            System.out.println("Beneficiaire : " + wrap.getAccountName());
+            logger.info("################################################");
+            logger.info("Solde (XPF) : " + wrap.getAccountBalance());
+            logger.info("Employeur : " + wrap.getAccountEmployeer());
+            logger.info("Beneficiaire : " + wrap.getAccountName());
             
             // Listing transactions
             /*System.out.println("Transactions :\n");
             Iterator<Transaction> iter = wrap.getTransactions().iterator();
             
             while (iter.hasNext()) {
-                System.out.println(iter.next().toString());
+                logger.info(iter.next().toString());
                 
             }
-            System.out.println("################################################");
+            logger.info("################################################");
             */
             
-            System.out.println("Affilies :");
+            logger.info("Fetching affilies :");
             ArrayList<Affilie> affilies = TicketsRestaurantsServiceWrapper.getAffilies();
             Iterator<Affilie> affIter = affilies.iterator();
             Affilie lAffilie = new Affilie();
             while(affIter.hasNext()){
                 lAffilie = affIter.next();
-                System.out.println(lAffilie);
+                logger.info(lAffilie.toString());
             }
             
             System.exit(0);
             
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex.getMessage());
             System.exit(1);
         }
     }
