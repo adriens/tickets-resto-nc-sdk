@@ -78,6 +78,8 @@ public class TicketsRestaurantsServiceWrapper {
     private String accountName;
     private String accountEmployeer;
     private int accountBalance;
+    
+    private HtmlPage transactionsPage;
 
     private ArrayList<Transaction> transactions;
     final static Logger logger = LoggerFactory.getLogger(TicketsRestaurantsServiceWrapper.class);
@@ -96,7 +98,7 @@ public class TicketsRestaurantsServiceWrapper {
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
         setUpAccount(login, password);
         //setUpAccount2(login, password);
-        //feedTransactions();
+        feedTransactions2();
 
     }
 
@@ -194,6 +196,7 @@ public class TicketsRestaurantsServiceWrapper {
         passwdField.setValueAttribute(password);
 
         HtmlButton button = form.getButtonByName(LOGIN_FORM_FIELD_ID_SUBMIT_BUTTON);
+        
         this.accountPage = button.click();
         File accountFile = new File("account.html");
         FileUtils.writeStringToFile(accountFile, this.accountPage.asXml(), "UTF-8");
@@ -268,6 +271,63 @@ public class TicketsRestaurantsServiceWrapper {
         logger.info("Balace found : <" + getAccountBalance() + ">");
     }
 
+    private void feedTransactions2() throws Exception {
+        // first, click on "TRANSACTIONS
+        // find the transaction button
+        setTransactions(new ArrayList<>());
+        HtmlAnchor transactionsAnchor = accountPage.getAnchorByHref("/transactions");
+        
+        this.transactionsPage = transactionsAnchor.click();
+        
+        
+        File tmpTransactionsFile = File.createTempFile("transactions-" + UUID.randomUUID(), ".html.tmp");
+        FileUtils.writeStringToFile(tmpTransactionsFile, this.transactionsPage.asXml(), "UTF-8");
+        
+        // now feed transactions from the temp local file
+        WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        webClient.getOptions().setJavaScriptEnabled(false);
+        
+        // load the page inot local file
+        HtmlPage tmpTransactionsPage = webClient.getPage("file://" + tmpTransactionsFile.getAbsolutePath());
+        
+        
+        logger.debug(transactionsPage.asText());
+        
+        if (tmpTransactionsPage.asText().contains("Liste de vos transactions")) {
+            logger.info("Transactions found");
+        } else {
+            logger.error("Was not able to fetch transactions");
+            throw new Exception("Was not able to fetch transactions");
+        }
+        // now we have to fetch transactions, one by one
+        HtmlTable transactionsTable = tmpTransactionsPage.getHtmlElementById("DataTables_Table_0");
+        String dateAsString;
+        String libele;
+        String debitAsString;
+        String credititAsString;
+        Date transactionDate;
+        Transaction lTransaction = new Transaction();
+        for (final HtmlTableBody body : transactionsTable.getBodies()) {
+            final List<HtmlTableRow> rows = body.getRows();
+            logger.debug("Rows found : " + rows.size());
+            // now fetch each row
+            Iterator<HtmlTableRow> rowIter = rows.iterator();
+            HtmlTableRow theRow;
+
+            while (rowIter.hasNext()) {
+                theRow = rowIter.next();
+                dateAsString = theRow.getCell(0).asText();
+                libele = theRow.getCell(1).asText();
+                debitAsString = theRow.getCell(2).asText();
+                credititAsString = theRow.getCell(3).asText();
+                logger.debug(theRow+"");
+                lTransaction = new Transaction(convertFromTextDate(dateAsString), libele, extractSolde(debitAsString), extractSolde(credititAsString));
+                getTransactions().add(lTransaction);
+                logger.debug("Added new transction : " + lTransaction.toString());
+            }
+            logger.debug("End of <" + getTransactions().size() + "> transactions fetching");
+        }
+    }
     private void feedTransactions() throws Exception {
         // first, click on "TRANSACTIONS
         // find the transaction button
