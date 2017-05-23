@@ -21,6 +21,7 @@
         <commons-io.version>2.5</commons-io.version>
         <libphonenumber.version>8.4.2</libphonenumber.version>
         
+        
         <!-- Plugins versions -->
         <maven-shade-plugin.version>3.0.0</maven-shade-plugin.version>
     </properties>
@@ -46,8 +47,7 @@
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
         </dependency>
-
-
+        
     </dependencies>
     
     <build>

@@ -7,6 +7,8 @@ package com.github.adriens.tickets.resto.nc.api;
 
 import java.util.Date;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -18,7 +20,7 @@ public class Transaction {
     private String libelle;
     private int debit;
     private int credit;
-    
+    final static Logger logger = LoggerFactory.getLogger(Transaction.class);
     
     public Transaction() {
 
