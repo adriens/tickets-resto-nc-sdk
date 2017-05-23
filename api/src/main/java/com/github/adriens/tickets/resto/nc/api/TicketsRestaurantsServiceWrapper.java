@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -365,8 +366,9 @@ public class TicketsRestaurantsServiceWrapper {
         
         HtmlPage affiliesPage = webClient.getPage(TicketsRestaurantsServiceWrapper.URL_AFFILIES);
         
-        // Create temp file and fill it with site contents
-        File temp = File.createTempFile("affilies", ".html.tmp");
+        // Create temp file with unique UUID to guarantee simultanous acees and fill it with site contents
+        File temp = File.createTempFile("affilies-" + UUID.randomUUID(), ".html.tmp");
+        
         //FileUtils.writeStringToFile(temp, affiliesPage.asXml());
         FileUtils.writeStringToFile(temp, affiliesPage.asXml(), "UTF-8");
         // disable js on the html page so we can fetch all in a single shot !
