@@ -5,7 +5,6 @@
  */
 package com.github.adriens.tickets.resto.nc.cli;
 
-import com.github.adriens.tickets.resto.nc.api.TicketsRestaurantsServiceWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
