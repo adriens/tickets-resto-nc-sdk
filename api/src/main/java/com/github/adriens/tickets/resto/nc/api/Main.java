@@ -28,9 +28,12 @@ public class Main {
             logger.info("Solde (XPF) : " + wrap.getAccountBalance());
             logger.info("Employeur : " + wrap.getAccountEmployeer());
             logger.info("Beneficiaire : " + wrap.getAccountName());
+            logger.info("################################################");
+            
             
             // Listing transactions
-            /*System.out.println("Transactions :\n");
+            logger.info("################################################");
+            logger.info("Transactions :\n");
             Iterator<Transaction> iter = wrap.getTransactions().iterator();
             
             while (iter.hasNext()) {
@@ -38,8 +41,9 @@ public class Main {
                 
             }
             logger.info("################################################");
-            */
             
+            
+            logger.info("################################################");
             logger.info("Fetching affilies :");
             ArrayList<Affilie> affilies = TicketsRestaurantsServiceWrapper.getAffilies();
             Iterator<Affilie> affIter = affilies.iterator();
