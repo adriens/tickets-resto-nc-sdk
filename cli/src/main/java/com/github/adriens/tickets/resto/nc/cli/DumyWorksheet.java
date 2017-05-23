@@ -12,6 +12,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -21,6 +23,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class DumyWorksheet {
 private static final String FILE_NAME = "MyFirstExcel.xlsx";
+final static Logger logger = LoggerFactory.getLogger(DumyWorksheet.class);
 
     public static void main(String[] args) {
 
@@ -37,7 +40,7 @@ private static final String FILE_NAME = "MyFirstExcel.xlsx";
         };
 
         int rowNum = 0;
-        System.out.println("Creating excel");
+        logger.info("Creating excel");
 
         for (Object[] datatype : datatypes) {
             Row row = sheet.createRow(rowNum++);
@@ -57,11 +60,9 @@ private static final String FILE_NAME = "MyFirstExcel.xlsx";
             workbook.write(outputStream);
             workbook.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
-
-        System.out.println("Done");
     }
 }
