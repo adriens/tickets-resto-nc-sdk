@@ -13,23 +13,20 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import javafx.scene.transform.Affine;
-import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -40,6 +37,7 @@ public class ExcelWrapper {
     private XSSFWorkbook workbook;
 
     private XSSFSheet affiliesSheet;
+    final static Logger logger = LoggerFactory.getLogger(ExcelWrapper.class);
 
     /*
     public ExcelWrapper(){
@@ -64,7 +62,7 @@ public class ExcelWrapper {
 
         TicketsRestaurantsServiceWrapper ticketsService = new TicketsRestaurantsServiceWrapper(login, password);
         int soldeBalance = ticketsService.getAccountBalance();
-        System.out.println("SOLDE détecté : " + soldeBalance);
+        logger.info("SOLDE détecté : " + soldeBalance);
         
         // load workbook
         File inputSoldeFile = new File(filename);
@@ -99,7 +97,7 @@ public class ExcelWrapper {
         
         
         int lastRowNum = soldeSheet.getPhysicalNumberOfRows();
-        System.out.println("nb rows found : " + lastRowNum);
+        logger.info("nb rows found : " + lastRowNum);
         if (lastRowNum == 0) {
             Row soldeRow = soldeSheet.createRow(0);
             Cell soldeCell = soldeRow.createCell(0);
