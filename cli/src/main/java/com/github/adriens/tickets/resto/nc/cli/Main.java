@@ -6,12 +6,16 @@
 package com.github.adriens.tickets.resto.nc.cli;
 
 import com.github.adriens.tickets.resto.nc.api.TicketsRestaurantsServiceWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author salad74
  */
 public class Main {
+    
+    final static Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
 
@@ -21,18 +25,18 @@ public class Main {
             wrap.createOrUpdateSolde("solde.xlsx", args[0], args[1]);
             }
             catch(Exception ex){
-                ex.printStackTrace();
+                logger.error(ex.getMessage());
             }
         
         /*try {
-            System.out.println("LOGIN : " + args[0]);
-            System.out.println("PASSWORD : " + args[1]);
+            logger.info("LOGIN : " + args[0]);
+            logger.info("PASSWORD : " + args[1]);
             
             TicketsRestaurantsServiceWrapper ticketsService = new TicketsRestaurantsServiceWrapper(args[0], args[1]);
             int soldeBalance = ticketsService.getAccountBalance();
-            System.out.println("SOLDE détecté : " + soldeBalance);
+            logger.info("SOLDE détecté : " + soldeBalance);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex.getMessage());
         }*/
 
     }
