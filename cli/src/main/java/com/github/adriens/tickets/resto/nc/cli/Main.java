@@ -22,6 +22,7 @@ public class Main {
                 ExcelWrapper wrap = new ExcelWrapper();
             
             wrap.createOrUpdateSolde("solde.xlsx", args[0], args[1]);
+            wrap.generateAffiliesSheet();
             }
             catch(Exception ex){
                 logger.error(ex.getMessage());

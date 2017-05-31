@@ -132,10 +132,7 @@ public class ExcelWrapper {
 
     public void generateAffiliesSheet() throws IOException, Exception {
         affiliesSheet = workbook.createSheet("Affilies");
-        /*Object[][] datatypes = {
-                {"Enseigne", "Catégorie", "Cuisine", "Téléphone", "Adresse", "Commune", "Quartier"}
-        };
-         */
+
         ArrayList<Affilie> affList = TicketsRestaurantsServiceWrapper.getAffilies();
         int rowNum = 0;
         Iterator<Affilie> affIter = affList.iterator();
