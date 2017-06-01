@@ -3,3 +3,6 @@
 /cli/target/
 /cli/nbactions.xml
 /cli/MyFirstExcel.xlsx
+*.project
+*.classpath
+/.settings/
