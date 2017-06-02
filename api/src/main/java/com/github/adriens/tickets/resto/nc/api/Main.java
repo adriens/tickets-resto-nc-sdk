@@ -5,6 +5,7 @@
  */
 package com.github.adriens.tickets.resto.nc.api;
 
+import com.gargoylesoftware.htmlunit.ProxyConfig;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.slf4j.Logger;
@@ -21,8 +22,9 @@ public class Main {
         try {
             String login = args[0];
             String password = args[1];
+            ProxyConfig proxyConfig = new ProxyConfig("proxyweb", 3128);
             
-            TicketsRestaurantsServiceWrapper wrap = new TicketsRestaurantsServiceWrapper(login, password);
+            TicketsRestaurantsServiceWrapper wrap = new TicketsRestaurantsServiceWrapper(proxyConfig,login, password);
             // now deal with with account, credit, transactions ;-p
             logger.info("################################################");
             logger.info("Solde (XPF) : " + wrap.getAccountBalance());

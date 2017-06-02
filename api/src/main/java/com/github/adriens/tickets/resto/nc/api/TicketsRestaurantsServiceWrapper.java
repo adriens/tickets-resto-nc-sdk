@@ -6,6 +6,7 @@
 package com.github.adriens.tickets.resto.nc.api;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.ProxyConfig;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
@@ -80,6 +81,8 @@ public class TicketsRestaurantsServiceWrapper {
     private int accountBalance;
     
     private HtmlPage transactionsPage;
+    
+    private ProxyConfig proxyConfig;
 
     private ArrayList<Transaction> transactions;
     final static Logger logger = LoggerFactory.getLogger(TicketsRestaurantsServiceWrapper.class);
@@ -92,11 +95,11 @@ public class TicketsRestaurantsServiceWrapper {
 
     }
 
-    public TicketsRestaurantsServiceWrapper(String login, String password) throws Exception {
+    public TicketsRestaurantsServiceWrapper(ProxyConfig proxyConfig, String login, String password) throws Exception {
         // Disable verbose logs
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
-        setUpAccount(login, password);
+        setUpAccount(proxyConfig, login, password);
         //setUpAccount2(login, password);
         feedTransactions2();
 
@@ -231,9 +234,12 @@ public class TicketsRestaurantsServiceWrapper {
     
         
     }
-    private void setUpAccount(String login, String password) throws Exception {
+    private void setUpAccount(ProxyConfig proxyConfig, String login, String password) throws Exception {
         // first perform login to webpage
+        this.proxyConfig = proxyConfig;
         WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        webClient.getOptions().setProxyConfig(proxyConfig);
+        
         HtmlPage htmlPage = webClient.getPage(URL);
         HtmlForm form = htmlPage.getHtmlElementById(LOGIN_FORM_ID);
 
