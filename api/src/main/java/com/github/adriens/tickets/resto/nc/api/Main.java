@@ -22,7 +22,12 @@ public class Main {
         try {
             String login = args[0];
             String password = args[1];
-            ProxyConfig proxyConfig = new ProxyConfig("proxyweb", 3128);
+            
+            // Avec proxy :
+            //ProxyConfig proxyConfig =  new ProxyConfig("proxyweb", 3128);
+            
+            // Sans proxy
+            ProxyConfig proxyConfig =  null;
             
             TicketsRestaurantsServiceWrapper wrap = new TicketsRestaurantsServiceWrapper(proxyConfig,login, password);
             // now deal with with account, credit, transactions ;-p

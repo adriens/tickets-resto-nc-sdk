@@ -12,11 +12,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -60,7 +64,7 @@ public class ExcelWrapper {
             InvalidFormatException, 
             Exception{
 
-        TicketsRestaurantsServiceWrapper ticketsService = new TicketsRestaurantsServiceWrapper(login, password);
+        TicketsRestaurantsServiceWrapper ticketsService = new TicketsRestaurantsServiceWrapper(null, login, password);
         int soldeBalance = ticketsService.getAccountBalance();
         logger.info("SOLDE détecté : " + soldeBalance);
         
@@ -131,21 +135,41 @@ public class ExcelWrapper {
     }
 
     public void generateAffiliesSheet() throws IOException, Exception {
-        affiliesSheet = workbook.createSheet("Affilies");
-
+        //affiliesSheet = workbook.createSheet("Affilies");
+        FileOutputStream fileOut = new FileOutputStream("Affilies.xls");
+	HSSFWorkbook workbook = new HSSFWorkbook();
+	HSSFSheet affiliesSheet = workbook.createSheet("Affilies");
+        
+        
         ArrayList<Affilie> affList = TicketsRestaurantsServiceWrapper.getAffilies();
         int rowNum = 0;
         Iterator<Affilie> affIter = affList.iterator();
         Affilie lAff;
-        String gmapsUrl = "";
         FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+        URL gmapsURL ;
         while (affIter.hasNext()) {
             Row row = affiliesSheet.createRow(rowNum++);
             lAff = affIter.next();
 
+            // setup enseigne
             Cell cellEnseigne = row.createCell(0);
-            cellEnseigne.setCellValue(lAff.getEnseigne());
+            //cellEnseigne.setCellValue(lAff.getEnseigne());
+            gmapsURL = Affilie.getGmapsURL(lAff.getEnseigne());
+            if(gmapsURL != null){
+                logger.info("Found gmapsURL : <" + gmapsURL.toString() + "> for <" + lAff.getEnseigne() + ">");
+                //gmapsUrl = "http://maps.google.com/maps?q=" + lAff.getFormattedAdress();
+                cellEnseigne.setCellFormula("HYPERLINK(\"" + gmapsURL.toString() + "\",\"" + lAff.getEnseigne()+ "\")");
+            }
+            else {
+             // no real matching URL : do nothing 
+             logger.warn("Could not find gmapURL ;-(");
+             cellEnseigne.setCellValue(lAff.getEnseigne());
+            }
 
+            
+            
+            
+            // setup categorie
             Cell cellCateg = row.createCell(1);
             cellCateg.setCellValue(URLDecoder.decode(lAff.getCategorie(), "UTF-8"));
 
@@ -161,15 +185,28 @@ public class ExcelWrapper {
             Cell cellComm = row.createCell(5);
             cellComm.setCellValue(lAff.getCommune());
 
-            Cell cellQuar = row.createCell(6);
+            /*Cell cellQuar = row.createCell(6);
             cellQuar.setCellValue(lAff.getQuartier());
-
-            Cell cellFullAdress = row.createCell(7);
-            gmapsUrl = "http://maps.google.com/maps?q=" + lAff.getFormattedAdress();
-            cellFullAdress.setCellFormula("HYPERLINK(\"" + gmapsUrl + "\",\"Voir sur Google Maps\")");
+            */
+            
+            /*Cell cellFullAdress = row.createCell(7);
+            // check if we can a matching gmpas url
+            gmapsURL = Affilie.getGmapsURL(lAff.getEnseigne());
+            if(gmapsURL != null){
+                logger.info("Found gmapsURL : <" + gmapsURL.toString() + "> for <" + lAff.getEnseigne() + ">");
+                //gmapsUrl = "http://maps.google.com/maps?q=" + lAff.getFormattedAdress();
+                cellFullAdress.setCellFormula("HYPERLINK(\"" + gmapsURL.toString() + "\",\"" + lAff.getEnseigne()+ "\")");
+            }
+            else {
+             // no real matching URL : do nothing 
+             logger.warn("Could not find gmapURL ;-(");
+             cellFullAdress.setCellValue("");
+            }*/
+            
 
         }
-
+        // Evaluate formulas so columns with formulas have the correct size
+        HSSFFormulaEvaluator.evaluateAllFormulaCells(workbook);
         affiliesSheet.autoSizeColumn(0);
         affiliesSheet.autoSizeColumn(1);
         affiliesSheet.autoSizeColumn(2);
@@ -177,6 +214,11 @@ public class ExcelWrapper {
         affiliesSheet.autoSizeColumn(4);
         affiliesSheet.autoSizeColumn(5);
         affiliesSheet.autoSizeColumn(6);
-        affiliesSheet.autoSizeColumn(7);
+        //affiliesSheet.autoSizeColumn(7);
+        
+        workbook.write(fileOut);
+			fileOut.flush();
+			fileOut.close();
+                        
     }
 }

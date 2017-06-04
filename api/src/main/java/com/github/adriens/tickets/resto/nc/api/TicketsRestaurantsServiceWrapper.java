@@ -234,11 +234,28 @@ public class TicketsRestaurantsServiceWrapper {
     
         
     }
+    
+    private WebClient buildWebClient(ProxyConfig proxyConfig){
+        this.proxyConfig = proxyConfig;
+        if(proxyConfig == null){
+            return buildWebClient();
+        }
+        WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        webClient.getOptions().setProxyConfig(proxyConfig);
+        return webClient;
+    }
+    private WebClient buildWebClient(){
+        this.proxyConfig = null;
+        WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        return webClient;
+    }
+    
+    
+    
     private void setUpAccount(ProxyConfig proxyConfig, String login, String password) throws Exception {
         // first perform login to webpage
         this.proxyConfig = proxyConfig;
-        WebClient webClient = new WebClient(BrowserVersion.CHROME);
-        webClient.getOptions().setProxyConfig(proxyConfig);
+        WebClient webClient = buildWebClient(proxyConfig);
         
         HtmlPage htmlPage = webClient.getPage(URL);
         HtmlForm form = htmlPage.getHtmlElementById(LOGIN_FORM_ID);
