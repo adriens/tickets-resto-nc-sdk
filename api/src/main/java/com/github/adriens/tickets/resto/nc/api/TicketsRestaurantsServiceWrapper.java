@@ -6,31 +6,18 @@
 package com.github.adriens.tickets.resto.nc.api;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.ProxyConfig;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlButton;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTable;
-import com.gargoylesoftware.htmlunit.html.HtmlTableBody;
-import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import com.gargoylesoftware.htmlunit.html.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -67,7 +54,6 @@ public class TicketsRestaurantsServiceWrapper {
     public static final String TEXT_USER_DOES_NOT_EXISTS = "Cet utilisateur n'existe pas";
     public static final String TEXT_MON_COMPTE = "Mon compte";
     public static final String TEXT_RECHARGE = "Recharge";
-    public static final String TEXT_TRANSACTION = "Transaction";
     public static final String RCS = "RCS NOUMEA 2013 B 1 181 346";
     // xpath resources
     public static final String XPATH_NAME = "/html/body/div[1]/div[2]/div[2]/div/strong[1]/text()";
@@ -80,10 +66,6 @@ public class TicketsRestaurantsServiceWrapper {
     private String accountEmployeer;
     private int accountBalance;
     
-    private HtmlPage transactionsPage;
-    
-    private ProxyConfig proxyConfig;
-
     private ArrayList<Transaction> transactions;
     final static Logger logger = LoggerFactory.getLogger(TicketsRestaurantsServiceWrapper.class);
     
@@ -95,14 +77,20 @@ public class TicketsRestaurantsServiceWrapper {
 
     }
 
-    public TicketsRestaurantsServiceWrapper(ProxyConfig proxyConfig, String login, String password) throws Exception {
-        // Disable verbose logs
-        java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
-        java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
-        setUpAccount(proxyConfig, login, password);
-        //setUpAccount2(login, password);
-        feedTransactions2();
+    public TicketsRestaurantsServiceWrapper(String login, String password, ServiceType type) throws Exception {
+        this();
 
+        switch (type) {
+            case SOLDE:
+                setUpAccount(login, password);
+                break;
+            case TRANSACTIONS:
+                feedTransactions();
+                break;
+            case BOTH:
+                setUpAccount(login, password);
+                feedTransactions();
+        }
     }
 
     // static utility functions
@@ -147,7 +135,7 @@ public class TicketsRestaurantsServiceWrapper {
     }
 
     protected final static boolean loginFormExistsWithExpectedId() throws IOException {
-        WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        WebClient webClient = buildWebClient();
         HtmlPage htmlPage = webClient.getPage(TicketsRestaurantsServiceWrapper.URL);
         // check if we can find the form
         HtmlForm form = htmlPage.getHtmlElementById(LOGIN_FORM_ID);
@@ -186,78 +174,21 @@ public class TicketsRestaurantsServiceWrapper {
             return false;
         }
     }
-    private void setUpAccount2(String login, String password) throws Exception {
-        // first perform login to webpage
-        WebClient webClient = new WebClient(BrowserVersion.CHROME);
-        HtmlPage htmlPage = webClient.getPage(URL);
-        HtmlForm form = htmlPage.getHtmlElementById(LOGIN_FORM_ID);
 
-        HtmlTextInput loginField = form.getInputByName(LOGIN_FORM_FIELD_ID_LOGIN);
-        loginField.setValueAttribute(login);
-
-        HtmlPasswordInput passwdField = form.getInputByName(LOGIN_FORM_FIELD_ID_PASSWORD);
-        passwdField.setValueAttribute(password);
-
-        HtmlButton button = form.getButtonByName(LOGIN_FORM_FIELD_ID_SUBMIT_BUTTON);
-        
-        this.accountPage = button.click();
-        File accountFile = new File("account.html");
-        FileUtils.writeStringToFile(accountFile, this.accountPage.asXml(), "UTF-8");
-        // disable js on the html page so we can fetch all in a single shot !
+    private static WebClient buildWebClient(){
+        WebClient webClient = new WebClient(BrowserVersion.FIREFOX_52);
         webClient.getOptions().setJavaScriptEnabled(false);
-        
-        // load the page
-        HtmlPage accountPage = webClient.getPage("file://" + accountFile.getAbsolutePath());
-        if (accountPage.asText().contains(TEXT_USER_DOES_NOT_EXISTS)) {
-            logger.error(TEXT_USER_DOES_NOT_EXISTS);
-            throw (new Exception(TEXT_USER_DOES_NOT_EXISTS));
-        } else {
-            logger.info("Successfully connected !");
-            if (accountPage.asText().contains(TEXT_MON_COMPTE)) {
-                logger.info("Mon compte trouve.");
-            } else {
-                logger.error("Impossible de trouver mon compte");
-                throw (new Exception("Impossible de toruver mon compte"));
-            }
-        }
-        // Extract name
-        this.setAccountName(accountPage.getFirstByXPath(XPATH_NAME).toString());
-        logger.info("Name found : <" + getAccountName() + ">");
-
-        // Extract Employeer
-        this.setAccountEmployeer(accountPage.getFirstByXPath(XPATH_EMPLOYEUR).toString());
-        logger.info("Employeer found : <" + getAccountEmployeer() + ">");
-
-        // Extract balance
-        this.setAccountBalance(extractSolde(accountPage.getFirstByXPath(XPATH_SOLDE).toString()));
-        logger.info("Balace found : <" + getAccountBalance() + ">");
-    
-        
-    }
-    
-    private WebClient buildWebClient(ProxyConfig proxyConfig){
-        this.proxyConfig = proxyConfig;
-        if(proxyConfig == null){
-            return buildWebClient();
-        }
-        WebClient webClient = new WebClient(BrowserVersion.CHROME);
-        webClient.getOptions().setProxyConfig(proxyConfig);
-        return webClient;
-    }
-    private WebClient buildWebClient(){
-        this.proxyConfig = null;
-        WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        webClient.getOptions().setDownloadImages(false);
         return webClient;
     }
     
     
     
-    private void setUpAccount(ProxyConfig proxyConfig, String login, String password) throws Exception {
+    private void setUpAccount(String login, String password) throws Exception {
         // first perform login to webpage
-        this.proxyConfig = proxyConfig;
-        WebClient webClient = buildWebClient(proxyConfig);
-        
+        WebClient webClient = buildWebClient();
         HtmlPage htmlPage = webClient.getPage(URL);
+
         HtmlForm form = htmlPage.getHtmlElementById(LOGIN_FORM_ID);
 
         HtmlTextInput loginField = form.getInputByName(LOGIN_FORM_FIELD_ID_LOGIN);
@@ -294,70 +225,13 @@ public class TicketsRestaurantsServiceWrapper {
         logger.info("Balace found : <" + getAccountBalance() + ">");
     }
 
-    private void feedTransactions2() throws Exception {
-        // first, click on "TRANSACTIONS
-        // find the transaction button
-        setTransactions(new ArrayList<>());
-        HtmlAnchor transactionsAnchor = accountPage.getAnchorByHref("/transactions");
-        
-        this.transactionsPage = transactionsAnchor.click();
-        
-        
-        File tmpTransactionsFile = File.createTempFile("transactions-" + UUID.randomUUID(), ".html.tmp");
-        FileUtils.writeStringToFile(tmpTransactionsFile, this.transactionsPage.asXml(), "UTF-8");
-        
-        // now feed transactions from the temp local file
-        WebClient webClient = new WebClient(BrowserVersion.CHROME);
-        webClient.getOptions().setJavaScriptEnabled(false);
-        
-        // load the page inot local file
-        HtmlPage tmpTransactionsPage = webClient.getPage("file://" + tmpTransactionsFile.getAbsolutePath());
-        
-        
-        logger.debug(transactionsPage.asText());
-        
-        if (tmpTransactionsPage.asText().contains("Liste de vos transactions")) {
-            logger.info("Transactions found");
-        } else {
-            logger.error("Was not able to fetch transactions");
-            throw new Exception("Was not able to fetch transactions");
-        }
-        // now we have to fetch transactions, one by one
-        HtmlTable transactionsTable = tmpTransactionsPage.getHtmlElementById("DataTables_Table_0");
-        String dateAsString;
-        String libele;
-        String debitAsString;
-        String credititAsString;
-        Date transactionDate;
-        Transaction lTransaction = new Transaction();
-        for (final HtmlTableBody body : transactionsTable.getBodies()) {
-            final List<HtmlTableRow> rows = body.getRows();
-            logger.debug("Rows found : " + rows.size());
-            // now fetch each row
-            Iterator<HtmlTableRow> rowIter = rows.iterator();
-            HtmlTableRow theRow;
-
-            while (rowIter.hasNext()) {
-                theRow = rowIter.next();
-                dateAsString = theRow.getCell(0).asText();
-                libele = theRow.getCell(1).asText();
-                debitAsString = theRow.getCell(2).asText();
-                credititAsString = theRow.getCell(3).asText();
-                logger.debug(theRow+"");
-                lTransaction = new Transaction(convertFromTextDate(dateAsString), libele, extractSolde(debitAsString), extractSolde(credititAsString));
-                getTransactions().add(lTransaction);
-                logger.debug("Added new transction : " + lTransaction.toString());
-            }
-            logger.debug("End of <" + getTransactions().size() + "> transactions fetching");
-        }
-    }
     private void feedTransactions() throws Exception {
         // first, click on "TRANSACTIONS
         // find the transaction button
         setTransactions(new ArrayList<>());
         HtmlAnchor transactionsAnchor = accountPage.getAnchorByHref("/transactions");
         HtmlPage transactionsPage = transactionsAnchor.click();
-        logger.debug(transactionsPage.asText());
+
         if (transactionsPage.asText().contains("Liste de vos transactions")) {
             logger.info("Transactions found");
         } else {
@@ -365,13 +239,12 @@ public class TicketsRestaurantsServiceWrapper {
             throw new Exception("Was not able to fetch transactions");
         }
         // now we have to fetch transactions, one by one
-        HtmlTable transactionsTable = transactionsPage.getHtmlElementById("DataTables_Table_0");
+        HtmlTable transactionsTable = (HtmlTable)transactionsPage.getElementsByTagName("table").get(0);
         String dateAsString;
         String libele;
         String debitAsString;
         String credititAsString;
-        Date transactionDate;
-        Transaction lTransaction = new Transaction();
+        Transaction lTransaction;
         for (final HtmlTableBody body : transactionsTable.getBodies()) {
             final List<HtmlTableRow> rows = body.getRows();
             logger.debug("Rows found : " + rows.size());
@@ -388,10 +261,63 @@ public class TicketsRestaurantsServiceWrapper {
                 logger.debug(theRow+"");
                 lTransaction = new Transaction(convertFromTextDate(dateAsString), libele, extractSolde(debitAsString), extractSolde(credititAsString));
                 getTransactions().add(lTransaction);
-                logger.debug("Added new transction : " + lTransaction.toString());
+                logger.debug("Added new transaction : " + lTransaction.toString());
             }
             logger.debug("End of <" + getTransactions().size() + "> transactions fetching");
         }
+    }
+
+    public static final ArrayList<Affilie> getAffilies() throws Exception {
+        WebClient webClient = buildWebClient();
+        ArrayList<Affilie> affilies ;
+        affilies = new ArrayList<>();
+
+        HtmlPage affiliesPage = webClient.getPage(TicketsRestaurantsServiceWrapper.URL_AFFILIES);
+
+        // Create temp file with unique UUID to guarantee simultanous acees and fill it with site contents
+        File temp = File.createTempFile("affilies-" + UUID.randomUUID(), ".html.tmp");
+
+        FileUtils.writeStringToFile(temp, affiliesPage.asXml(), "UTF-8");
+        // load the page
+        HtmlPage localAffiliesPage = webClient.getPage("file://" + temp.getAbsolutePath());
+
+        // parse the page !
+        final HtmlTable table = (HtmlTable)localAffiliesPage.getElementsByTagName("table").get(0);
+
+        Affilie lAffilie;
+
+        for (final HtmlTableBody body : table.getBodies()) {
+            final List<HtmlTableRow> rows = body.getRows();
+            logger.info("Affilies detected : " + rows.size());
+            // now fetch each row
+            Iterator<HtmlTableRow> rowIter = rows.iterator();
+            HtmlTableRow theRow;
+            logger.info("Fetching affilies...");
+            String lEnseigne;
+            String lCategorie;
+            String lCuisine;
+            String lTelephone;
+            String lAdresse;
+            String lCommune;
+            String lQuartier;
+            int affiliesCount = 0;
+            while (rowIter.hasNext()) {
+                theRow = rowIter.next();
+                affiliesCount++;
+                lEnseigne = theRow.getCell(0).asText();
+                lCategorie = theRow.getCell(1).asText();
+                lCuisine = theRow.getCell(2).asText();
+                lTelephone = theRow.getCell(3).asText();
+                lAdresse = theRow.getCell(4).asText();
+                lCommune = theRow.getCell(5).asText();
+                lQuartier = theRow.getCell(6).asText();
+                logger.info("Found affilie <" + affiliesCount + "/" + rows.size() + "> : <" + lEnseigne + ">" + lCommune);
+                lAffilie = new Affilie(lEnseigne, lCategorie, lCuisine, lTelephone, lAdresse, lCommune, lQuartier);
+                affilies.add(lAffilie);
+            }
+        }
+        Collections.sort(affilies);
+        return affilies;
     }
 
     @Override
@@ -442,60 +368,5 @@ public class TicketsRestaurantsServiceWrapper {
         this.accountBalance = accountBalance;
     }
 
-    public static final ArrayList<Affilie> getAffilies() throws Exception {
-        WebClient webClient = new WebClient();
-        ArrayList<Affilie> affilies ;
-        affilies = new ArrayList<>();
-        
-        HtmlPage affiliesPage = webClient.getPage(TicketsRestaurantsServiceWrapper.URL_AFFILIES);
-        
-        // Create temp file with unique UUID to guarantee simultanous acees and fill it with site contents
-        File temp = File.createTempFile("affilies-" + UUID.randomUUID(), ".html.tmp");
-        
-        //FileUtils.writeStringToFile(temp, affiliesPage.asXml());
-        FileUtils.writeStringToFile(temp, affiliesPage.asXml(), "UTF-8");
-        // disable js on the html page so we can fetch all in a single shot !
-        webClient.getOptions().setJavaScriptEnabled(false);
-        // load the page
-        HtmlPage localAffiliesPage = webClient.getPage("file://" + temp.getAbsolutePath());
-        
-        // parse the page !
-        String tableId = "DataTables_Table_0";
-        final HtmlTable table = localAffiliesPage.getHtmlElementById(tableId);
-        
-        Affilie lAffilie = new Affilie();
-        
-        for (final HtmlTableBody body : table.getBodies()) {
-            final List<HtmlTableRow> rows = body.getRows();
-            logger.info("Affilies detected : " + rows.size());
-            // now fetch each row
-            Iterator<HtmlTableRow> rowIter = rows.iterator();
-            HtmlTableRow theRow;
-            logger.info("Fetching affilies...");
-            String lEnseigne;
-            String lCategorie;
-            String lCuisine;
-            String lTelephone;
-            String lAdresse;
-            String lCommune;
-            String lQuartier;
-            int affiliesCount = 0;
-            while (rowIter.hasNext()) {
-                theRow = rowIter.next();
-                affiliesCount++;
-                lEnseigne = theRow.getCell(0).asText();
-                lCategorie = theRow.getCell(1).asText();
-                lCuisine = theRow.getCell(2).asText();
-                lTelephone = theRow.getCell(3).asText();
-                lAdresse = theRow.getCell(4).asText();
-                lCommune = theRow.getCell(5).asText();
-                lQuartier = theRow.getCell(6).asText();
-                logger.info("Found affilie <" + affiliesCount + "/" + rows.size() + "> : <" + lEnseigne + ">" + lCommune);
-                lAffilie = new Affilie(lEnseigne, lCategorie, lCuisine, lTelephone, lAdresse, lCommune, lQuartier);
-                affilies.add(lAffilie);
-            }
-        }
-        Collections.sort(affilies);
-        return affilies;
-    }
+
 }

@@ -6,3 +6,9 @@
 *.project
 *.classpath
 /.settings/
+/api/tickets-resto-nc-api.iml
+/.idea/
+/cli/tickets-resto-nc-cli.iml
+/tickets-resto-nc.iml
+/solde.xlsx
+/Affilies.xls

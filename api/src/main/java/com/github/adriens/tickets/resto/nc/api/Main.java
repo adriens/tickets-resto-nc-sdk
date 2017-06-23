@@ -23,13 +23,7 @@ public class Main {
             String login = args[0];
             String password = args[1];
             
-            // Avec proxy :
-            //ProxyConfig proxyConfig =  new ProxyConfig("proxyweb", 3128);
-            
-            // Sans proxy
-            ProxyConfig proxyConfig =  null;
-            
-            TicketsRestaurantsServiceWrapper wrap = new TicketsRestaurantsServiceWrapper(proxyConfig,login, password);
+            TicketsRestaurantsServiceWrapper wrap = new TicketsRestaurantsServiceWrapper(login, password, ServiceType.BOTH);
             // now deal with with account, credit, transactions ;-p
             logger.info("################################################");
             logger.info("Solde (XPF) : " + wrap.getAccountBalance());
@@ -49,16 +43,6 @@ public class Main {
             }
             logger.info("################################################");
             
-            
-            logger.info("################################################");
-            logger.info("Fetching affilies :");
-            ArrayList<Affilie> affilies = TicketsRestaurantsServiceWrapper.getAffilies();
-            Iterator<Affilie> affIter = affilies.iterator();
-            Affilie lAffilie = new Affilie();
-            while(affIter.hasNext()){
-                lAffilie = affIter.next();
-                logger.info(lAffilie.toString());
-            }
             
             System.exit(0);
             

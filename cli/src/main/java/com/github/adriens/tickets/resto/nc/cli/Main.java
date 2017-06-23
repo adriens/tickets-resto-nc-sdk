@@ -19,9 +19,9 @@ public class Main {
     public static void main(String[] args) {
 
         try{
-                ExcelWrapper wrap = new ExcelWrapper();
+            ExcelWrapper wrap = new ExcelWrapper();
             
-            //wrap.createOrUpdateSolde("solde.xlsx", args[0], args[1]);
+            wrap.createOrUpdateSolde("solde.xlsx", args[0], args[1]);
             wrap.generateAffiliesSheet();
             }
             catch(Exception ex){
