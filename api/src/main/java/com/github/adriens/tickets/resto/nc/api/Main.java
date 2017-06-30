@@ -51,7 +51,7 @@ public class Main {
 				logger.error(e1.getMessage());
 				System.exit(1);
 			}
-			logger.error(ex.getMessage());
+			logger.error(ex.getMessage() + " Merci de renseigner vos identifiants/password dans le fichier .password");
 			System.exit(1);
 		} finally {
 			if (input != null) {

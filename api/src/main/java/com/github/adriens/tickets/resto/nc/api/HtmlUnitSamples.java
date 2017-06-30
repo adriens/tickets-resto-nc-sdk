@@ -58,8 +58,8 @@ public class HtmlUnitSamples {
                     System.out.println("Mon compte trouve.");
                 }
                 else{
-                    System.err.println("Impossible de toruver mon compte");
-                    throw (new Exception("Impossible de toruver mon compte"));
+                    System.err.println("Impossible de trouver mon compte");
+                    throw (new Exception("Impossible de trouver mon compte"));
                 }
             }
             System.out.println(page2.asText());

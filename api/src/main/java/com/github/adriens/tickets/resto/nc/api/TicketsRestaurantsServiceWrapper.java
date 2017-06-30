@@ -209,7 +209,7 @@ public class TicketsRestaurantsServiceWrapper {
                 logger.info("Mon compte trouve.");
             } else {
                 logger.error("Impossible de trouver mon compte");
-                throw (new Exception("Impossible de toruver mon compte"));
+                throw (new Exception("Impossible de trouver mon compte"));
             }
         }
         // Extract name
