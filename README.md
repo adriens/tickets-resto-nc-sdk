@@ -56,5 +56,5 @@ Follow jitpack instructions, see https://jitpack.io/#adriens/tickets-resto-nc-ap
 # Motivations
 
 - [x] Deal with htmlunit
-- [ ] Deal with Apache POI
-- [ ] Discover advanced features of Google Spreadsheets : dashboatd, reporting, mobile apps based on spreadsheets, ...
+- [x] Deal with Apache POI
+- [x] Discover advanced features of Google Spreadsheets : dashboatd, reporting, mobile apps based on spreadsheets, ...
