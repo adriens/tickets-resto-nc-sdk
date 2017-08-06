@@ -4,7 +4,24 @@
 # tickets-resto-nc-api
 
 
-Implémentation Java de l'API de http://www.ticketrestaurant.nc
+Implémentation Java de l'API du site Web ds tickets restaurants de
+Nouvelle-Calédonie (http://www.ticketrestaurant.nc).
+
+Actuellement il n'existe pas d'API pour interagir avec ce sîte Web : cela
+est maintenant possible.
+
+# Projets connexes
+
+Une appli [jhypster](https://jhipster.github.io/) : https://github.com/DSI-Ville-Noumea/ticket-restonc-web
+est en cours de développement qui tente de couvrir les fonctionnalités non
+couvertes aujourd'hui sur le site officiel :
+
+- envoie des notifications dès qu'une transaction est effectuée
+- site web qui ajoute un visu et des fonctionnalités qui correspondent davantage à nos attentes (statistiques, reporting, ...)
+
+# Autres idées
+
+Implémenter une appli android qui permet de consulter son solde entre autres.
 
 # Use case
 
