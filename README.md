@@ -4,7 +4,7 @@
 # tickets-resto-nc-api
 
 
-Implémentation Java de l'API du site Web ds tickets restaurants de
+Implémentation Java de l'API du site Web des tickets restaurants de
 Nouvelle-Calédonie (http://www.ticketrestaurant.nc).
 
 Actuellement il n'existe pas d'API pour interagir avec ce sîte Web : cela
@@ -75,3 +75,4 @@ Follow jitpack instructions, see https://jitpack.io/#adriens/tickets-resto-nc-ap
 - [x] Deal with htmlunit
 - [x] Deal with Apache POI
 - [x] Discover advanced features of Google Spreadsheets : dashboatd, reporting, mobile apps based on spreadsheets, ...
+- [x] Getting fun as we gain the power on the data
