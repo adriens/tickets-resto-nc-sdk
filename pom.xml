@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <commons-lang.version>3.5</commons-lang.version>
+        <commons-lang.version>3.6</commons-lang.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
     </properties>
