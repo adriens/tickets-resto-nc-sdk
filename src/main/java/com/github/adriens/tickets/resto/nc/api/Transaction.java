@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author salad74
  */
-public class Transaction {
+public class Transaction  implements Comparable<Transaction> {
 
     private Date date;
     private String libelle;
@@ -64,6 +64,24 @@ public class Transaction {
         hash = 53 * hash + this.debit;
         hash = 53 * hash + this.credit;
         return hash;
+    }
+    
+    @Override
+    public int compareTo( final Transaction t) {
+        //return this.getEnseigne().compareTo(a.getEnseigne());
+        if(
+                this.getLibelle().equals(t.getLibelle()) &&
+                this.getDate().equals(t.getDate()) &&
+                (this.getCredit() == t.getCredit()) &&
+                (this.getDebit() == t.getDebit())
+                )
+        {
+            return 0;
+        }
+        else {
+            return this.getDate().compareTo(t.getDate());
+        }
+        
     }
 
     /**
