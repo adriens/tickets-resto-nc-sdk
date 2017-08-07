@@ -66,6 +66,20 @@ Date : Wed Mar 29 00:00:00 SBT 2017 (Recharge)
 
 
 ```
+
+# Récupération des affiliés
+
+```java
+ArrayList<Affilie> affilies = TicketsRestaurantsServiceWrapper.getAffilies();
+            Iterator<Affilie> affIter = affilies.iterator();
+            Affilie aff = new Affilie();
+            
+            logger.info("Affilies :\n");
+            while(affIter.hasNext()){
+                aff =  affIter.next();
+                logger.info(aff.toString());
+            }
+```
 # Use this lib in your project
 
 Follow jitpack instructions, see https://jitpack.io/#adriens/tickets-resto-nc-api
