@@ -111,12 +111,16 @@ public class TicketsRestaurantsServiceWrapper {
         solde = StringUtils.chomp(solde);
         solde = StringUtils.deleteWhitespace(solde);
         logger.debug("SOLDE DETECTE : " + solde);
-        // convert it to a number
-        try {
-            return Integer.parseInt(solde);
-        } catch (NumberFormatException ex) {
-            logger.error("Unable to cast String of solde <" + solde + ">into it numeric version : " + ex.getMessage());
-            throw ex;
+        if(solde.isEmpty())
+            return 0;
+        else {
+            // convert it to a number
+            try {
+                return Integer.parseInt(solde);
+            } catch (NumberFormatException ex) {
+                logger.error("Unable to cast String of solde <" + solde + ">into it numeric version : " + ex.getMessage());
+                throw ex;
+            }
         }
     }
 
