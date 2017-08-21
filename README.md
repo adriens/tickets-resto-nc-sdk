@@ -28,24 +28,26 @@ Implémenter une appli android qui permet de consulter son solde entre autres.
 Pour recuperer les datas, tout simplement :
 
 ```java
-            String login = "xxxxxxxxx";
-            String password = "xxxxxx";
-            
-            TicketsRestaurantsServiceWrapper wrap = new TicketsRestaurantsServiceWrapper(login, password);
-            // now deal with with account, credit, transactions ;-p
-            System.out.println("################################################");
-            System.out.println("Solde (XPF) : " + wrap.getAccountBalance());
-            System.out.println("Employeur : " + wrap.getAccountEmployeer());
-            System.out.println("Beneficiaire : " + wrap.getAccountName());
-            // Listing transactions
-            System.out.println("Transactions :\n");
-            Iterator<Transaction> iter = wrap.getTransactions().iterator();
-            
-            while (iter.hasNext()) {
-                System.out.println(iter.next().toString());
-                
-            }
-            System.out.println("################################################");
+        String login = "xxxxxxxxx";
+        String password = "xxxxxx";
+           
+        TicketsRestaurantsServiceWrapper wrap = new TicketsRestaurantsServiceWrapper(login, password, ServiceType.BOTH);
+	// now deal with with account, credit, transactions ;-p
+	logger.info("################################################");
+	logger.info("Solde (XPF) : " + wrap.getAccountBalance());
+	logger.info("Employeur : " + wrap.getAccountEmployeer());
+	logger.info("Beneficiaire : " + wrap.getAccountName());
+	logger.info("################################################");
+
+	// Listing transactions
+	logger.info("################################################");
+	logger.info("Transactions :\n");
+	Iterator<Transaction> iter = wrap.getTransactions().iterator();
+
+	while (iter.hasNext()) {
+	    logger.info(iter.next().toString());
+        }
+	logger.info("################################################");
 ```
 
 Output :
