@@ -77,6 +77,12 @@ public class TicketsRestaurantsServiceWrapper {
 
     }
 
+    public TicketsRestaurantsServiceWrapper(String login, String password) throws Exception {
+        this();
+        setUpAccount(login, password);
+        feedTransactions();
+    }
+    
     public TicketsRestaurantsServiceWrapper(String login, String password, ServiceType type) throws Exception {
         this();
 
