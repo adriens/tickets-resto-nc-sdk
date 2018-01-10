@@ -4,7 +4,7 @@
     
     <version>1.5</version>
     <groupId>com.github.adriens</groupId>
-    <artifactId>tickets-resto-nc-api</artifactId>
+    <artifactId>tickets-resto-nc-sdk</artifactId>
     <packaging>jar</packaging>
     
     <name>Classes utilitaires pour Tickets Restaurant nc</name>
