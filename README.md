@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/adriens/tickets-resto-nc.svg?branch=master)](https://travis-ci.org/adriens/tickets-resto-nc) [![Join the chat at https://gitter.im/tickets-resto-nc-api/Lobby](https://badges.gitter.im/tickets-resto-nc-api/Lobby.svg)](https://gitter.im/tickets-resto-nc-api/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![](https://jitpack.io/v/adriens/tickets-resto-nc-api.svg)](https://jitpack.io/#adriens/tickets-resto-nc-api) [![Dependency Status](https://www.versioneye.com/user/projects/598428cb6725bd0076c18b3d/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/598428cb6725bd0076c18b3d)
 
 
-# tickets-resto-nc-api
+# tickets-resto-nc-sdk
 
 
 Implémentation Java de l'API du site Web des tickets restaurants de
