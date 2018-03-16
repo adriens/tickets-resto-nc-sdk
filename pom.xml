@@ -18,7 +18,7 @@
         <!-- deps properties -->
         <htmlunit.version>2.29</htmlunit.version>
         <commons-io.version>2.6</commons-io.version>
-        <libphonenumber.version>8.8.8</libphonenumber.version>
+        <libphonenumber.version>8.9.1</libphonenumber.version>
         <commons-lang.version>3.6</commons-lang.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
