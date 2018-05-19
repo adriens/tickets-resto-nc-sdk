@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/adriens/tickets-resto-nc-sdk.svg?branch=master)](https://travis-ci.org/adriens/tickets-resto-nc-sdk) [![Join the chat at https://gitter.im/tickets-resto-nc-api/Lobby](https://badges.gitter.im/tickets-resto-nc-api/Lobby.svg)](https://gitter.im/tickets-resto-nc-api/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)[![](https://jitpack.io/v/adriens/tickets-resto-nc-sdk.svg)](https://jitpack.io/#adriens/tickets-resto-nc-sdk)
-[![Dependency Status](https://beta.gemnasium.com/badges/github.com/adriens/tickets-resto-nc-sdk.svg)](https://beta.gemnasium.com/projects/github.com/adriens/tickets-resto-nc-sdk)
 
 # tickets-resto-nc-sdk
 
