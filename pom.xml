@@ -26,6 +26,7 @@
         
         <!-- Plugins versions -->
         <maven-shade-plugin.version>3.1.1</maven-shade-plugin.version>
+        <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
     </properties>
     
     <dependencies>
@@ -83,7 +84,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
+                <version>${maven-jar-plugin.version}</version>
         <configuration>
           <archive>
             <manifest>
