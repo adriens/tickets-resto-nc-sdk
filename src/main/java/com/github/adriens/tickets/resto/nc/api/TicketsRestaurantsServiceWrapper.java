@@ -58,7 +58,8 @@ public class TicketsRestaurantsServiceWrapper {
     // xpath resources
     public static final String XPATH_NAME = "/html/body/div[1]/div[2]/div[2]/div/div[1]/strong[1]/text()";
     public static final String XPATH_EMPLOYEUR = "/html/body/div[1]/div[2]/div[2]/div/div[1]/strong[2]/text()";
-    public static final String XPATH_SOLDE = "/html/body/div[1]/div[2]/div[2]/div/strong[3]/text()";
+    public static final String XPATH_SOLDE = "/html/body/div[1]/div[2]/div[2]/div/div[1]/strong[3]/text()";
+                                              
 
     // Account Page
     private HtmlPage accountPage;
