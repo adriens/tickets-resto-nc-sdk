@@ -56,9 +56,9 @@ public class TicketsRestaurantsServiceWrapper {
     public static final String TEXT_RECHARGE = "Recharge";
     public static final String RCS = "RCS NOUMEA 2013 B 1 181 346";
     // xpath resources
-    public static final String XPATH_NAME = "/html/body/div[1]/div[2]/div[2]/div/div[1]/strong[1]/text()";
-    public static final String XPATH_EMPLOYEUR = "/html/body/div[1]/div[2]/div[2]/div/div[1]/strong[2]/text()";
-    public static final String XPATH_SOLDE = "/html/body/div[1]/div[2]/div[2]/div/div[1]/strong[3]/text()";
+    public static final String XPATH_NAME = "/html/body/div[1]/div[2]/div[2]/div/strong[1]/text()";
+    public static final String XPATH_EMPLOYEUR = "/html/body/div[1]/div[2]/div[2]/div/strong[2]/text()";
+    public static final String XPATH_SOLDE = "/html/body/div[1]/div[2]/div[2]/div/strong[3]/text()";
                                               
 
     // Account Page
