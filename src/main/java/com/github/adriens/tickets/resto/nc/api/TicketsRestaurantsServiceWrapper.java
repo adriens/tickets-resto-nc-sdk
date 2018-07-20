@@ -287,8 +287,14 @@ public class TicketsRestaurantsServiceWrapper {
 
         // Create temp file with unique UUID to guarantee simultanous acees and fill it with site contents
         File temp = File.createTempFile("affilies-" + UUID.randomUUID(), ".html.tmp");
-
         FileUtils.writeStringToFile(temp, affiliesPage.asXml(), "UTF-8");
+        String content = FileUtils.readFileToString(temp, "UTF-8");
+        // SImply replace the bad formatted line, with a good formated one see #49 
+        content = content.replace("<a href=\"/components/com_trd/helpers/affilies.pdf target=\" _blank\"=\"\">", "<a href=\"/components/com_trd/helpers/affilies.pdf\" target=\"_blank\">");
+        // replace temp content with the cleaned one
+        FileUtils.writeStringToFile(temp, content, "UTF-8");
+        
+        
         // load the page
         HtmlPage localAffiliesPage = webClient.getPage("file://" + temp.getAbsolutePath());
 
