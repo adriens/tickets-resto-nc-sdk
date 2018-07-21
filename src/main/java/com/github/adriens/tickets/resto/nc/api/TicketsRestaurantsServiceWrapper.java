@@ -391,7 +391,7 @@ public class TicketsRestaurantsServiceWrapper {
     }
 
 
-    public InputStream getAffiliesPdf() throws Exception{
+    public static final InputStream getAffiliesPdf() throws Exception{
         try{
             logger.info("Getting pdf stream from website ...");
             InputStream out = new URL(URL_AFFILIES_PDF).openStream();
