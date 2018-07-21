@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -42,6 +45,8 @@ public class TicketsRestaurantsServiceWrapper {
     public static final String URL = "http://www.ticketrestaurant.nc/";
     public static final String URL_MENTIONS_LEGALES = "http://www.ticketrestaurant.nc/mentions-legales";
     public static final String URL_AFFILIES = "http://www.ticketrestaurant.nc/liste-des-affilies";
+    public static final String URL_AFFILIES_PDF = "http://www.ticketrestaurant.nc/components/com_trd/helpers/affilies.pdf";
+    
 
     public static final String SITE_TITLE = "Ticket Restaurant - La carte ticket restaurant en Nouvelle Calédonie";
     // form ids
@@ -386,4 +391,15 @@ public class TicketsRestaurantsServiceWrapper {
     }
 
 
+    public InputStream getAffiliesPdf() throws Exception{
+        try{
+            logger.info("Getting pdf stream from website ...");
+            InputStream out = new URL(URL_AFFILIES_PDF).openStream();
+            return out;
+        }
+        catch(Exception ex){
+            logger.error("Unable to get pdf Stream from website : " + ex.getMessage());
+            throw  ex;
+        }
+    }
 }
