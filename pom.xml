@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
-    <version>1.17-SNAPSHOT</version>
+    <version>1.17</version>
     <groupId>com.github.adriens</groupId>
     <artifactId>tickets-resto-nc-sdk</artifactId>
     <packaging>jar</packaging>
@@ -16,9 +16,9 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         
         <!-- deps properties -->
-        <htmlunit.version>2.35.0</htmlunit.version>
+        <htmlunit.version>2.36.0</htmlunit.version>
         <commons-io.version>2.6</commons-io.version>
-        <libphonenumber.version>8.10.16</libphonenumber.version>
+        <libphonenumber.version>8.10.20</libphonenumber.version>
         <commons-lang.version>3.7</commons-lang.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
