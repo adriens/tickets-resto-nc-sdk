@@ -42,10 +42,10 @@ public class TicketsRestaurantsServiceWrapper {
         this.transactions = transactions;
     }
 
-    public static final String URL = "http://www.ticketrestaurant.nc/";
-    public static final String URL_MENTIONS_LEGALES = "http://www.ticketrestaurant.nc/mentions-legales";
-    public static final String URL_AFFILIES = "http://www.ticketrestaurant.nc/liste-des-affilies";
-    public static final String URL_AFFILIES_PDF = "http://www.ticketrestaurant.nc/components/com_trd/helpers/affilies.pdf";
+    public static final String URL = "https://www.ticketrestaurant.nc/";
+    public static final String URL_MENTIONS_LEGALES = "https://www.ticketrestaurant.nc/mentions-legales";
+    public static final String URL_AFFILIES = "https://www.ticketrestaurant.nc/liste-des-affilies";
+    public static final String URL_AFFILIES_PDF = "https://www.ticketrestaurant.nc/components/com_trd/helpers/affilies.pdf";
     
 
     public static final String SITE_TITLE = "Ticket Restaurant - La carte ticket restaurant en Nouvelle Calédonie";
