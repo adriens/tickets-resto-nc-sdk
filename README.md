@@ -4,7 +4,7 @@
 
 
 Implémentation Java de l'API du site Web des tickets restaurants de
-Nouvelle-Calédonie (http://www.ticketrestaurant.nc).
+Nouvelle-Calédonie (https://www.neocarte.nc).
 
 Actuellement il n'existe pas d'API pour interagir avec ce sîte Web : cela
 est maintenant possible.
