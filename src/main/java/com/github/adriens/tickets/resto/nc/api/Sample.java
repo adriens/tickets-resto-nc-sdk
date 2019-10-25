@@ -19,8 +19,8 @@ public class Sample {
 
     public static void main(String[] args) {
         try {
-            String login = "xxxxxxxx";
-            String password = "xxxxxx";
+            String login = "";
+            String password = "";
 
             TicketsRestaurantsServiceWrapper wrap = new TicketsRestaurantsServiceWrapper(login, password, ServiceType.BOTH);
             // now deal with with account, credit, transactions ;-p

@@ -42,13 +42,13 @@ public class TicketsRestaurantsServiceWrapper {
         this.transactions = transactions;
     }
 
-    public static final String URL = "https://www.ticketrestaurant.nc/";
-    public static final String URL_MENTIONS_LEGALES = "https://www.ticketrestaurant.nc/mentions-legales";
-    public static final String URL_AFFILIES = "https://www.ticketrestaurant.nc/liste-des-affilies";
-    public static final String URL_AFFILIES_PDF = "https://www.ticketrestaurant.nc/components/com_trd/helpers/affilies.pdf";
+    public static final String URL = "https://www.neocarte.nc/";
+    public static final String URL_MENTIONS_LEGALES = "https://www.neocarte.nc/mentions-legales";
+    public static final String URL_AFFILIES = "https://www.neocarte.nc/liste-des-affilies";
+    public static final String URL_AFFILIES_PDF = "https://www.neocarte.nc/components/com_trd/helpers/affilies.pdf";
     
 
-    public static final String SITE_TITLE = "Ticket Restaurant - La carte ticket restaurant en Nouvelle Calédonie";
+    public static final String SITE_TITLE = "Néocarte - La carte Néocarte en Nouvelle Calédonie";
     // form ids
     public static final String LOGIN_FORM_ID = "login-form";
     public static final String LOGIN_FORM_FIELD_ID_LOGIN = "username";
@@ -245,7 +245,7 @@ public class TicketsRestaurantsServiceWrapper {
         // first, click on "TRANSACTIONS
         // find the transaction button
         setTransactions(new ArrayList<>());
-        HtmlAnchor transactionsAnchor = accountPage.getAnchorByHref("/transactions");
+        HtmlAnchor transactionsAnchor = accountPage.getAnchorByHref("/mes-transactions");
         HtmlPage transactionsPage = transactionsAnchor.click();
 
         if (transactionsPage.asText().contains("Liste de vos transactions")) {
