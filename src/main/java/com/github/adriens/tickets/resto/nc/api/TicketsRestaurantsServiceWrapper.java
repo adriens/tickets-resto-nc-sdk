@@ -192,7 +192,7 @@ public class TicketsRestaurantsServiceWrapper {
     }
 
     private static WebClient buildWebClient(){
-        WebClient webClient = new WebClient(BrowserVersion.FIREFOX_52);
+        WebClient webClient = new WebClient(BrowserVersion.FIREFOX_68);
         webClient.getOptions().setJavaScriptEnabled(false);
         webClient.getOptions().setDownloadImages(false);
         return webClient;
