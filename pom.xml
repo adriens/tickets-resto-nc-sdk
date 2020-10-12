@@ -21,7 +21,7 @@
         <libphonenumber.version>8.11.3</libphonenumber.version>
         <commons-lang.version>3.7</commons-lang.version>
         <logback.version>1.2.3</logback.version>
-        <junit.version>4.13</junit.version>
+        <junit.version>4.13.1</junit.version>
         
         
         <!-- Plugins versions -->
