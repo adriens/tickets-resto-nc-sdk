@@ -1,0 +1,21 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "18:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: com.googlecode.libphonenumber:libphonenumber
+    versions:
+    - 8.12.17
+    - 8.12.18
+    - 8.12.19
+    - 8.12.20
+    - 8.12.21
+  - dependency-name: net.sourceforge.htmlunit:htmlunit
+    versions:
+    - 2.46.0
+    - 2.47.1
+    - 2.48.0
